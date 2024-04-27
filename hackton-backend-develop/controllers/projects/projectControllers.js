@@ -164,7 +164,7 @@ async function checkForPlagiarism(code) {
     url: 'https://ai-plagiarism-checker.p.rapidapi.com/detector/v1/',
     headers: {
       'content-type': 'application/x-www-form-urlencoded',
-      'X-RapidAPI-Key': '20782f52f7mshe68b16d38a6fb84p18b6bdjsnd56974fa2b62', // Replace with your RapidAPI key
+      'X-RapidAPI-Key': 'YOUR_API_KEY', // Replace with your RapidAPI key
       'X-RapidAPI-Host': 'ai-plagiarism-checker.p.rapidapi.com'
     },
     data: encodedParams,
@@ -180,7 +180,7 @@ async function checkForPlagiarism(code) {
       url: 'https://ai-content-detector-ai-gpt.p.rapidapi.com/api/detectText/',
       headers: {
         'content-type': 'application/json',
-        'X-RapidAPI-Key': '20782f52f7mshe68b16d38a6fb84p18b6bdjsnd56974fa2b62', // Replace with your RapidAPI key
+        'X-RapidAPI-Key': 'YOUR_API_KEY', // Replace with your RapidAPI key
         'X-RapidAPI-Host': 'ai-content-detector-ai-gpt.p.rapidapi.com'
       },
       data: {
