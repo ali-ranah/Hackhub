@@ -8,6 +8,7 @@ import Layout from './Layout/Layout';
 import Home from './src/Components/Home/Home';
 import EditProfile from './src/Components/EditProfile/EditProfile';
 import UpdateProfile from './src/Components/EditProfile/UpdateProfile';
+import Compiler from './src/Components/Compiler/Compiler';
 
 
 
@@ -31,12 +32,12 @@ const Navigation = () => {
           )}
         </Stack.Screen>
         <Stack.Screen
-  name="Hackathon"
+  name="Compiler"
   options={{ headerShown: false }}
 >
   {() => (
     <Layout>
-      <EditProfile />
+      <Compiler />
     </Layout>
   )}
 </Stack.Screen>

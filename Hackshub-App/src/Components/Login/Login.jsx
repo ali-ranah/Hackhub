@@ -9,8 +9,6 @@ import { AxiosRequest } from '../Axios/AxiosRequest';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
-// import { Picker } from '@react-native-picker/picker';
-
 const Login = () => {
   const navigation = useNavigation();
   const [email, setEmail] = useState('');
@@ -19,10 +17,6 @@ const Login = () => {
 
   const role = 'Participant';
   const dispatch = useDispatch();
-  // const roleOptions = [
-  //   { label:'Organizer', value: 'Organizer' },
-  //   { label:'Participant',value: 'Participant' },
-  // ];
 
   const handleSubmit = async () => {
     try {
@@ -80,15 +74,6 @@ const Login = () => {
           </TouchableOpacity>
           </View>
         </View>
-{/* <Picker
-            selectedValue={role}
-            onValueChange={(itemValue) => setRole(itemValue)}
-            style={{ borderWidth: 1, borderColor: 'gray', borderRadius: 4, padding: 8, marginTop: 8 }}
-          >
-            {roleOptions.map((option) => (
-              <Picker.Item key={option.value} label={option.label} value={option.value} />
-            ))}
-          </Picker> */}
 </View>
         
 <View className="text-center flex items-center justify-center mt-10 space-y-2">

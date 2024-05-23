@@ -100,7 +100,7 @@ useEffect(() => {
               <div className="flex flex-col ">
               <p className="text-lg font-bold text-white mt-4">Question </p>
               <span className="text-lg text-start font-bold text-white mt-2 mb-2">{question}</span>
-       <Textarea
+       <textarea
                onCopy={handleCopyPaste}
                onPaste={handleCopyPaste}
             value={title}
@@ -108,14 +108,14 @@ useEffect(() => {
             required   
             size="md"
             color="black"
-            label="Enter Project Title"
+            placeholder="Enter Project Title"
             className="rounded-md resize-none focus:ring-0  "
-            ></Textarea>
+            ></textarea>
       <textarea
         value={code}
         onChange={(e) => setCode(e.target.value)}
-        onCopy={handleCopyPaste}
-        onPaste={handleCopyPaste}
+        // onCopy={handleCopyPaste}
+        // onPaste={handleCopyPaste}
         placeholder="Enter your code here"
         className="p-2 mt-4 bg-white border border-gray-300 rounded-md resize-none  focus:ring-0 focus:border-black "
       ></textarea>
