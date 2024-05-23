@@ -158,10 +158,10 @@ const Home = () => {
                       <div className="flex items-center">
                       <MdOutlineTimer size={20} color='black' />
                       <div className="ml-2">
-    <p className="text-sm font-bold text-black">Guidelines: {event.guidelines}</p>
-  </div>
-  </div>
-)}
+        <p className="text-sm font-bold text-black">Guidelines: {event.guidelines}</p>
+        </div>
+         </div>
+        )}
                     {event.guidelines.length > 50 && (
                                           <div className="flex items-start">
                                           <MdOutlineTimer size={20} color='black' />

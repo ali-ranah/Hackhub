@@ -184,14 +184,15 @@ useEffect(() => {
 
 
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-white dark:text-gray-200">
-                      {!event.registered && new Date() >= new Date(event.start_date) && new Date() <= new Date(event.end_date) && !joinedEvents.includes(event.id) && !event.projectDataLength && (
-                        <button
-  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-  onClick={() => handleJoinEvent(event.id, event.question, event.description, event.guidelines ? event.guidelines : '')}
->
-  Join
-</button>
+                      {!event.registered && new Date() <= new Date(event.end_date) && (
+  <button
+    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+    onClick={() => handleJoinEvent(event.id, event.question, event.description, event.guidelines ? event.guidelines : '')}
+  >
+    Join
+  </button>
 )}
+
 
                         {event.registered  &&event.projectDataLength > 0 && !event.gradingData &&(
                           <span className="text-white font-bold ">Already Submitted</span>
@@ -199,9 +200,10 @@ useEffect(() => {
                         {event.registered  &&event.projectDataLength > 0 && event.gradingData &&(
                         <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded " onClick={() =>!showGrade?setShowGrade('true'):setShowGrade(null)}>{!showGrade?'Show Grade':'Hide Grade'}</button>
                         )}
-                        {event.registered && event.projectDataLength === 0 && (
-                          <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded " onClick={() => handleNavigate(event.id)}>Submit</button>
-                        )}
+{event.registered && event.projectDataLength === 0 && new Date() <= new Date(event.end_date) && (
+  <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded " onClick={() => handleNavigate(event.id)}>Submit</button>
+)}
+
                       </td>
                     </tr>
                   ))}
