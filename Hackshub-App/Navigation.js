@@ -9,6 +9,8 @@ import Home from './src/Components/Home/Home';
 import EditProfile from './src/Components/EditProfile/EditProfile';
 import UpdateProfile from './src/Components/EditProfile/UpdateProfile';
 import Compiler from './src/Components/Compiler/Compiler';
+import AIChatBot from './src/Components/Chatbot/AIChatBot';
+import Hackathons from './src/Components/Hackathons/Hackathons';
 
 
 
@@ -38,6 +40,26 @@ const Navigation = () => {
   {() => (
     <Layout>
       <Compiler />
+    </Layout>
+  )}
+</Stack.Screen>
+<Stack.Screen
+          name="Hackathons"
+          options={{ headerShown: false }}
+        >
+          {() => (
+            <Layout>
+              <Hackathons />
+            </Layout>
+          )}
+        </Stack.Screen>
+<Stack.Screen
+  name="AI Bot"
+  options={{ headerShown: false }}
+>
+  {() => (
+    <Layout>
+      <AIChatBot />
     </Layout>
   )}
 </Stack.Screen>

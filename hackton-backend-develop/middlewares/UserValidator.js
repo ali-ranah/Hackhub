@@ -100,38 +100,6 @@ module.exports = class UserValidator {
     next();
   }
 
-  // static async userLogin(req, res, next) {
-  //   const { password, email } = req.body;
-  //   try {
-  //     const check = checkItem({
-  //       email,
-  //       password
-  //     });
-  //     if (Object.keys(check).length > 0) {
-  //       return res.status(400).json({
-  //         statusCode: 400,
-  //         check
-  //       });
-  //     }
-  //     const returnUser = await userModel.getUserBy({ email });
-
-  //     if (returnUser && returnUser.password) {
-  //       const checkPassword = await bcrypt.compareSync(
-  //         password,
-  //         returnUser.password
-  //       );
-  //       if (returnUser && checkPassword) {
-  //         // eslint-disable-next-line require-atomic-updates
-  //         req.checked = returnUser;
-  //         next();
-  //       }
-  //     }
-
-  //     return requestHandler.error(res, 400, 'wrong credentials');
-  //   } catch (err) {
-  //     return err;
-  //   }
-  // }
   static async userLogin(req, res, next) {
     const { password, email} = req.body;
     try {

@@ -126,9 +126,11 @@ const Compiler = () => {
       </View>
       <Text style={styles.outputText}>Output:</Text>
       {error ? <Text style={styles.errorText}>Error: {error}</Text> : null}
-      <ScrollView style={styles.output}>
-        <Text>{output}</Text>
+      <View className='flex w-full'>
+      <ScrollView className='p-6 mt-[2vh]  border bg-white' contentContainerStyle='justify-center align-center'>
+        <Text className='text-black'>{output}</Text>
       </ScrollView>
+      </View>
     </View>
   );
 };

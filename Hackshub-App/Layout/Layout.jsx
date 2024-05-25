@@ -5,7 +5,6 @@ import Header from '../src/Components/Header/Header';
 const Layout = ({ children }) => {
   return (
     <View className="flex h-screen overflow-hidden">
-      {/* Header */}
       <View className="flex-grow">
         <Header />
       </View>

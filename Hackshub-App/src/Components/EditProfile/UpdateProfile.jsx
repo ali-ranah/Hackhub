@@ -181,7 +181,7 @@ const handleImageUpload = async () => {
         onChangeText={(text) => handleChange('dob', text)}
         style={styles.input}
       />
-      <Button title="Save" onPress={handleSubmit} disabled={loading} />
+      <Button title="Save" onPress={handleImageUpload} disabled={loading} />
     </View>
   );
 };

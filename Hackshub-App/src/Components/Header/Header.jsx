@@ -5,29 +5,25 @@ import { useSelector } from 'react-redux';
 import logo from "../../../assets/logo.jpg";
 import { selectSelectedRole } from '../../../State/Reducers/roleSlice';
 import { useNavigation } from '@react-navigation/native';
-
 import Profile from './Profile';
 
 const Header = () => {
   const [openNav, setOpenNav] = useState(false);
   const navigation = useNavigation();
 
-//   const storedRole = localStorage.getItem('selectedRole');
-//   const role = useSelector(selectSelectedRole) || storedRole;
-
 const navList = (
   <View className="mt-2  flex flex-col  gap-2 lg:mb-0 lg:mt-0  lg:flex-row lg:items-center lg:gap-6">
     <TouchableOpacity onPress={() => navigation.navigate('Home')}>
       <Text style={{ color: 'white', marginHorizontal: 6 }}>Home</Text>
     </TouchableOpacity>
-    <TouchableOpacity onPress={() => navigation.navigate('Hackathon')}>
+    <TouchableOpacity onPress={() => navigation.navigate('Hackathons')}>
       <Text style={{ color: 'white', marginHorizontal: 6 }}>Hackathons</Text>
     </TouchableOpacity>
     <TouchableOpacity onPress={() => navigation.navigate('Compiler')}>
       <Text style={{ color: 'white', marginHorizontal: 6 }}>Compiler</Text>
     </TouchableOpacity>
-    <TouchableOpacity onPress={() => navigation.navigate('AiBot')}>
-      <Text style={{ color: 'white', marginHorizontal: 6 }}>Ai Bot</Text>
+    <TouchableOpacity onPress={() => navigation.navigate('AI Bot')}>
+      <Text style={{ color: 'white', marginHorizontal: 6 }}>AI Bot</Text>
     </TouchableOpacity>
   </View>
 );
