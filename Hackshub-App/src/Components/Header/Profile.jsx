@@ -49,34 +49,35 @@ const Profile = () => {
     }
   }, [dispatch, navigation]);
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      setLoading(true);
+  const fetchUser = useCallback(async () => {
+    setLoading(true);
 
-      try {
-        const response = await AxiosRequest.post(
-          '/api/users/search',
-          { email },
-          {
-            headers: {
-              authorization: token,
-            },
+    try {
+      const response = await AxiosRequest.post(
+        '/api/users/search',
+        { email },
+        {
+          headers: {
+            authorization: token,
           }
-        );
-        const data = response.data.body.user;
-        if (data) {
-          setImagePath(data.image_url);
-        } else {
-          console.error('Failed to fetch user:', data.message);
         }
-      } catch (error) {
-        console.error('Error fetching user:', error);
-      } finally {
-        setLoading(false);
+      );
+      const data = response.data.body.user;
+      if (data) {
+        setImagePath(data.image_url);
+      } else {
+        console.error('Failed to fetch user:', data.message);
       }
-    };
+    } catch (error) {
+      console.error('Error fetching user:', error);
+    } finally {
+      setLoading(false);
+    }
+  }, [email, token]);
+
+  useEffect(() => {
     fetchUser();
-  }, [token, email]);
+  }, [fetchUser]);
 
   const handleProfileScreen = () => {
     navigation.navigate('Profile');

@@ -33,7 +33,6 @@ const navList = (
         <TouchableOpacity className='absolute left-2'>
           <Image source={logo} className="w-10 h-8" />
         </TouchableOpacity>
-        {/* <View>{navList}</View> */}
         <View className="items-center gap-x-4 flex flex-row">
         <Profile />
 

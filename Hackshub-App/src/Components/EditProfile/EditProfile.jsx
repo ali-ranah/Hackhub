@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useCallback } from 'react';
 import { View, Text, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Avatar,Button } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -18,29 +18,35 @@ const EditProfile = () => {
     const token = useSelector(selectToken)||storedToken;
     const email = useSelector(selectEmail)||storedEmail;
 
-    useEffect(() => {
-        const fetchUser = async () => {
-            try {
-               
-                const response = await AxiosRequest.post('/api/users/search', { email }, {
-                    headers: {
-                        authorization: token
-                    }
-                });
-                const data = response.data.body.user;
-                if (data) {
-                    setUser(data);
-                } else {
-                    console.error('Failed to fetch user:', data.message);
-                }
-            } catch (error) {
-                console.error('Error fetching user:', error);
-            } finally {
-                setLoading(false);
+    const fetchUser = useCallback(async () => {
+        setLoading(true);
+    
+        try {
+          const response = await AxiosRequest.post(
+            '/api/users/search',
+            { email },
+            {
+              headers: {
+                authorization: token,
+              }
             }
-        };
+          );
+          const data = response.data.body.user;
+          if (data) {
+            setUser(data);
+          } else {
+            console.error('Failed to fetch user:', data.message);
+          }
+        } catch (error) {
+          console.error('Error fetching user:', error);
+        } finally {
+          setLoading(false);
+        }
+      }, [email, token]);
+    
+      useEffect(() => {
         fetchUser();
-    }, []);
+      }, [fetchUser]);
 
     const handleEdit = () => {
         navigation.navigate('UpdateProfile');
