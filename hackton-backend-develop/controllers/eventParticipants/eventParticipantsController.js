@@ -68,6 +68,28 @@ async function handleEventDelete(req, res) {
     });
 }
 
+async function handleSpecificEventsUserSignedFor (req, res) {
+  try {
+    // const { perPage } = req.query;
+    // const { currentPage } = req.query;
+    const { id } = req.params;
+    const { userId } = req.decodedToken;
+    const registeredEvents = await db.getByUserIdAndEventId( userId,id);
+    return requestHandler.success(
+      res,
+      200,
+      'Retrieved events registered by user successfully',
+      registeredEvents
+    );
+  } catch (error) {
+    return requestHandler.error(
+      res,
+      500,
+      `Internal server error ${error.message}`
+    );
+  }
+};
+
 async function handleEventsUserSignedFor (req, res) {
   try {
     // const { perPage } = req.query;
@@ -89,8 +111,10 @@ async function handleEventsUserSignedFor (req, res) {
   }
 };
 
+
 module.exports = {
   handleEventsGetById,
+  handleSpecificEventsUserSignedFor,
   handleEventRegistration,
   handleEventDelete,
   handleEventsUserSignedFor

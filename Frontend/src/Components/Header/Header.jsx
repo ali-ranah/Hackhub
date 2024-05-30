@@ -41,7 +41,7 @@ const Header = () => {
         color="white"
         className="flex items-center gap-x-2 p-1 font-medium"
       >
-        <a href={`/${role.toLowerCase()}/ai-bot`}>Ai Bot</a>
+        <a href={`/${role.toLowerCase()}/ai-bot`}>AI Bot</a>
       </Typography>
       {role === "Organizer" && (
         <Typography

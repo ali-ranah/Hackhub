@@ -33,6 +33,29 @@ async function remove(user_id, event_id) {
 }
 
 
+const getByUserIdAndEventId = async (id,eventId) => {
+  return db('event_participants as p')
+    .join('users as u', 'u.id', 'p.user_id')
+    .join('events as e', 'e.id', 'p.event_id')
+    .select(
+      'p.id',
+      'p.event_id',
+      'p.user_id',
+      'p.question',
+      'p.guidelines',
+      'p.description',
+      'e.event_title',
+      'e.start_date',
+      'e.end_date',
+      'e.location',
+      'u.fullname as organizer_name',
+      'u.email as organizer_email',
+      'u.username as organizer_username',
+      'u.verified'
+    )
+    .where({ user_id: id,event_id:eventId });
+};
+
 const getByUserId = async (id) => {
   return db('event_participants as p')
     .join('users as u', 'u.id', 'p.user_id')
@@ -58,6 +81,7 @@ const getByUserId = async (id) => {
 
 module.exports = {
   getByEventId,
+  getByUserIdAndEventId,
   addCredentials,
   remove,
   getByUserId

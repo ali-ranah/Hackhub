@@ -168,7 +168,7 @@ useEffect(() => {
     {event.gradingData && event.gradingData.length > 0 ? (
       <>
         <td className="px-6 py-4 whitespace-nowrap text-sm text-white dark:text-gray-200">{event.gradingData[0].average_rating}</td>
-        <td className="px-6 py-4 whitespace-nowrap text-sm text-white dark:text-gray-200">{event.gradingData[0].plagiarism_score}</td>
+        <td className="px-6 py-4 whitespace-nowrap text-sm text-white dark:text-gray-200">{event.gradingData[0].plagiarism}</td>
         <td className="px-6 py-4 whitespace-nowrap text-sm text-white dark:text-gray-200">{event.gradingData[0].ai_content}</td>
       </>
     ) : (

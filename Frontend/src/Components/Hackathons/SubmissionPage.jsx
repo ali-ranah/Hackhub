@@ -94,7 +94,7 @@ const SubmissionPage = () => {
   >
     <h1 className="text-xl font-bold mb-4">Project Title: {project.project_title}</h1>
     <p><strong>Participant Name:</strong> {project.participant_or_team_name}</p>
-    <p><strong>Project Code:</strong> {project.project_writeups}</p>
+    <p><strong>Project Code:</strong><pre className='text-sm text-wrap lg:text-md'>{project.project_writeups}</pre></p>
     <p><strong>Participant ID:</strong> {project.submitted_by}</p>
     <p><strong>Created At:</strong> {new Date(project.created_at).toLocaleString()}</p>
     {gradings.some(grading => grading.project_id === project.id) ? (
@@ -108,7 +108,7 @@ const SubmissionPage = () => {
         <div key={index}>
           <p><strong>Grade:</strong> {grading.average_rating}</p>
           <p><strong>AI Content:</strong> {grading.ai_content}</p>
-          <p><strong>Plagiarism:</strong> {grading.plagiarism_score}</p>
+          <p><strong>Plagiarism:</strong> {grading.plagiarism}</p>
         </div>
       ))}
   </>

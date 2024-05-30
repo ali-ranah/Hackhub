@@ -112,7 +112,7 @@ async function handleprojectGradingPost(req, res) {
     
     // Include adjusted grade in the projectGrading object
     projectGrading.average_rating = adjustedGrade;
-    projectGrading.plagiarism_score = plagiarismPercentage;
+    projectGrading.plagiarism = plagiarismPercentage;
     projectGrading.ai_content = aiContentPercentage;
  
 

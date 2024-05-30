@@ -31,7 +31,7 @@ async function findAllGradingsByEventId(id) {
       'u.fullname as judge_fullname',
       'g.judge_comments',
       'g.ai_content',
-      'g.plagiarism_score'
+      'g.plagiarism'
     )
     .where({ project_event_id: id });
   return foundAllGrades;
@@ -61,7 +61,7 @@ async function findGrading(id) {
       'u.fullname as judge_fullname',
       'g.judge_comments',
       'g.ai_content',
-      'g.plagiarism_score'
+      'g.plagiarism'
     )
     .where({ project_id: id });
   return foundSubmission;

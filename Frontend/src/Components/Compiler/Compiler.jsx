@@ -14,7 +14,7 @@ const Compiler = () => {
   const [lang, setLang] = useState("");
   const [output, setOutput] = useState("");
   const [error, setError] = useState("");
-  const { eventId } = useParams();
+  const {eventId} = useParams();
   const [title,setTitle] = useState("");
   const [question, setQuestion] = useState("");
   const storedToken = localStorage.getItem('token');
@@ -27,7 +27,7 @@ console.log('Token: ' + token);
 useEffect(() => {
   const fetchQuestion = async () => {
     try {
-      const response = await AxiosRequest.get('/api/events/participants/user', {
+      const response = await AxiosRequest.get(`/api/events/participants/user/${eventId}`, {
         headers: {
           authorization: token
         }

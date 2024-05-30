@@ -19,7 +19,8 @@ const {
   handleEventsGetById,
   handleEventRegistration,
   handleEventDelete,
-  handleEventsUserSignedFor
+  handleEventsUserSignedFor,
+  handleSpecificEventsUserSignedFor
 } = require('../controllers/eventParticipants/eventParticipantsController');
 
 const {
@@ -111,6 +112,7 @@ router.get(
   handleEventsGetById
 );
 
+router.get('/participants/user/:id', authenticate, handleSpecificEventsUserSignedFor);
 router.get('/participants/user', authenticate, handleEventsUserSignedFor);
 
 router.post(

@@ -4,6 +4,7 @@ const teamDb = require('../../models/eventTeamModel');
 const requestHandler = require('../../utils/requestHandler');
 const projectsModel = require('../../models/projectsModel');
 const axios = require('axios');
+require("dotenv").config();
 
 // Project Submissions requirements
 
@@ -164,7 +165,7 @@ async function checkForPlagiarism(code) {
     url: 'https://ai-plagiarism-checker.p.rapidapi.com/detector/v1/',
     headers: {
       'content-type': 'application/x-www-form-urlencoded',
-      'X-RapidAPI-Key': 'YOUR_API_KEY', // Replace with your RapidAPI key
+      'X-RapidAPI-Key': process.env.Plagiarism_Key, // Replace with your RapidAPI key
       'X-RapidAPI-Host': 'ai-plagiarism-checker.p.rapidapi.com'
     },
     data: encodedParams,
@@ -172,7 +173,7 @@ async function checkForPlagiarism(code) {
 
   try {
     const response = await axios.request(options);
-    const plagiarismScore = response.data.average_score;
+    let plagiarismScore = response.data.average_score;
 
     // Using another API for content detection
     const contentDetectionOptions = {
@@ -180,7 +181,7 @@ async function checkForPlagiarism(code) {
       url: 'https://ai-content-detector-ai-gpt.p.rapidapi.com/api/detectText/',
       headers: {
         'content-type': 'application/json',
-        'X-RapidAPI-Key': 'YOUR_API_KEY', // Replace with your RapidAPI key
+        'X-RapidAPI-Key': process.env.AI_CONTENT_KEY, // Replace with your RapidAPI key
         'X-RapidAPI-Host': 'ai-content-detector-ai-gpt.p.rapidapi.com'
       },
       data: {
@@ -189,7 +190,10 @@ async function checkForPlagiarism(code) {
     };
 
     const contentDetectionResponse = await axios.request(contentDetectionOptions);
-    const aiContent = contentDetectionResponse.data.fakePercentage;
+    let aiContent = contentDetectionResponse.data.fakePercentage;
+    
+    plagiarismScore = parseFloat(plagiarismScore).toFixed(2);
+    aiContent = parseFloat(aiContent).toFixed(2);
 
     return { plagiarismScore, aiContent };
   } catch (error) {
