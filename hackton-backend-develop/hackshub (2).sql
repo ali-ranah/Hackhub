@@ -239,7 +239,11 @@ CREATE TABLE `users` (
   `DOB` date DEFAULT NULL,
   `country` varchar(255) DEFAULT NULL,
   `mobile` varchar(20) DEFAULT NULL,
-  `region` varchar(20) DEFAULT NULL
+  `region` varchar(20) DEFAULT NULL,
+  `C_skill` int(10) DEFAULT 0,
+  `Cpp_skill` int(10) DEFAULT 0,
+  `JAVA_skill` int(10) DEFAULT 0,
+  `PYTHON_skill` int(10) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --

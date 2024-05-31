@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "cross-env DB_ENV=test jest --detectOpenHandles --testTimeout=20000 --coverage --runInBand --forceExit",
-    "start": "node index.js",
+    "start": "nodemon index.js",
     "server": "nodemon index.js",
     "pretest": "knex migrate:rollback --env=test && knex migrate:latest --env=test",
     "migrate": "knex migrate:latest",

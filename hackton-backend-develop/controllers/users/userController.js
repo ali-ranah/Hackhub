@@ -42,80 +42,143 @@ async function handleGetSingleUser(req, res) {
   }
 }
 
+// const updateUserProfile = async (req, res) => {
+//   try {
+//     const { userId } = req.decodedToken;
+//     const foundUser = await userModel.getSingleUser({ id: userId });
+//     const {formData} = req.body;
+
+//     if (foundUser) {
+//       let updates = {};
+
+//       // Allow participants to update additional fields
+//       if (foundUser.role === 'Participant') {
+//         if (formData.C_skill !== undefined) {
+//           updates.C_skill = formData.C_skill;
+//         }
+//         if (formData.Cpp_skill !== undefined) {
+//           updates.Cpp_skill = formData.Cpp_skill;
+//         }
+//         if (formData.JAVA_skill !== undefined) {
+//           updates.JAVA_skill = formData.JAVA_skill;
+//         }
+//         if (formData.PYTHON_skill !== undefined) {
+//           updates.PYTHON_skill = formData.PYTHON_skill;
+//         }
+//       }
+
+//       if (formData.image_url) {
+//         updates.image_url = formData.image_url;
+//       }
+
+//       // Allow both organizers and participants to update common fields
+//       if (req.file) {
+//         const currentImage = JSON.parse(foundUser.image_url);
+//         formData.image_url = [
+//           { avatar: req.file.secure_url, public_id: req.file.public_id }
+//         ];
+//         cloudinary.deleteCloudImage(currentImage);
+//         updates.image_url = formData.image_url;
+//       }
+
+//       // Do not allow email updates
+//       if (formData.email && formData.email !== foundUser.email) {
+//         return requestHandler.error(res, 400, 'Email cannot be updated');
+//       }
+
+//       if (formData.username && formData.username !== foundUser.username) {
+//         updates.username = formData.username;
+//       }
+
+//       if (formData.fullname && formData.fullname !== foundUser.fullname) {
+//         updates.fullname = formData.fullname;
+//       }
+
+//       if (formData.country && formData.country !== foundUser.country) {
+//         updates.country = formData.country;
+//       }
+//       if (formData.mobile && formData.mobile !== foundUser.mobile) {
+//         updates.mobile = formData.mobile;
+//       }
+//       if (formData.region && formData.region !== foundUser.region) {
+//         updates.region = formData.region;
+//       }
+//       if (formData.DOB && formData.DOB !== foundUser.DOB) {
+//         updates.DOB = formData.DOB;
+//       }
+
+//       const userUpdates = await userModel.updateUser(updates, userId);
+//       return requestHandler.success(res, 200, 'Profile updated successfully', {
+//         userUpdates
+//       });
+//     }
+
+//     return requestHandler.error(res, 400, `You are not authorized to do this`);
+//   } catch (error) {
+//     return requestHandler.error(res, 500, `Server error: ${error.message}`);
+//   }
+// };
+
+
 const updateUserProfile = async (req, res) => {
   try {
     const { userId } = req.decodedToken;
     const foundUser = await userModel.getSingleUser({ id: userId });
+    const formData = req.body; // Directly access req.body
 
     if (foundUser) {
       let updates = {};
 
       // Allow participants to update additional fields
       if (foundUser.role === 'Participant') {
-        if (req.body.codingExperience) {
-          updates.codingExperience = req.body.codingExperience;
+        if (formData.C_skill !== 0) {
+          updates.C_skill = formData.C_skill;
         }
-        if (req.body.gitProfile) {
-          updates.gitProfile = req.body.gitProfile;
+        if (formData.Cpp_skill !== 0) {
+          updates.Cpp_skill = formData.Cpp_skill;
         }
-        if (req.body.linkedinProfile) {
-          updates.linkedinProfile = req.body.linkedinProfile;
+        if (formData.JAVA_skill !== 0) {
+          updates.JAVA_skill = formData.JAVA_skill;
         }
-        if (req.body.education) {
-          updates.education = req.body.education;
-        }
-        if (req.body.organization) {
-          updates.organization = req.body.organization;
-        }
-        if (req.body.instituteName) {
-          updates.instituteName = req.body.instituteName;
-        }
-        if (req.body.languages) {
-          updates.languages = req.body.languages;
+        if (formData.PYTHON_skill !== 0) {
+          updates.PYTHON_skill = formData.PYTHON_skill;
         }
       }
 
-      if (req.body.image_url) {
-        updates.image_url = req.body.image_url;
-      }
-
-      // Allow both organizers and participants to update common fields
       if (req.file) {
         const currentImage = JSON.parse(foundUser.image_url);
-        req.body.image_url = [
+        updates.image_url = [
           { avatar: req.file.secure_url, public_id: req.file.public_id }
         ];
         cloudinary.deleteCloudImage(currentImage);
-        updates.image_url = req.body.image_url;
+      } else if (formData.image_url) {
+        updates.image_url = formData.image_url;
       }
 
       // Do not allow email updates
-      if (req.body.email && req.body.email !== foundUser.email) {
+      if (formData.email && formData.email !== foundUser.email) {
         return requestHandler.error(res, 400, 'Email cannot be updated');
       }
 
-      if (req.body.username && req.body.username !== foundUser.username) {
-        updates.username = req.body.username;
+      if (formData.username && formData.username !== foundUser.username) {
+        updates.username = formData.username;
       }
 
-      if (req.body.fullname && req.body.fullname !== foundUser.fullname) {
-        updates.fullname = req.body.fullname;
+      if (formData.fullname && formData.fullname !== foundUser.fullname) {
+        updates.fullname = formData.fullname;
       }
 
-      if (req.body.bio && req.body.bio !== foundUser.bio) {
-        updates.bio = req.body.bio;
+      if (formData.country && formData.country !== foundUser.country) {
+        updates.country = formData.country;
       }
-      if (req.body.country && req.body.country !== foundUser.country) {
-        updates.country = req.body.country;
+      if (formData.mobile && formData.mobile !== foundUser.mobile) {
+        updates.mobile = formData.mobile;
       }
-      if (req.body.mobile && req.body.mobile !== foundUser.mobile) {
-        updates.mobile = req.body.mobile;
+      if (formData.region && formData.region !== foundUser.region) {
+        updates.region = formData.region;
       }
-      if (req.body.region && req.body.region !== foundUser.region) {
-        updates.region = req.body.region;
-      }
-      if (req.body.DOB && req.body.DOB !== foundUser.DOB) {
-        updates.DOB = req.body.DOB;
+      if (formData.dob && formData.dob !== foundUser.DOB) {
+        updates.DOB = formData.dob;
       }
 
       const userUpdates = await userModel.updateUser(updates, userId);
@@ -129,6 +192,8 @@ const updateUserProfile = async (req, res) => {
     return requestHandler.error(res, 500, `Server error: ${error.message}`);
   }
 };
+
+
 
 
 module.exports = {

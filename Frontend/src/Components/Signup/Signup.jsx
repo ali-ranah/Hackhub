@@ -240,10 +240,11 @@ label="Select Role"
   ))}
 </Select>
 
-
+         <div className='flex items-center justify-center'>
           <Button type="submit" color="black" size="lg">
             Sign up
           </Button>
+          </div>
         </form>
         <div className="text-center">
           <span className="text-gray-600">Already have an account?</span>{' '}

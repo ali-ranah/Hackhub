@@ -82,10 +82,17 @@ async function getSingleUser(filter) {
       'u.mobile',
       'u.region',
       'u.DOB',
-      'u.image_url'
+      'u.role',
+      'u.image_url',
+      'u.C_skill',
+      'u.Cpp_skill',
+      'u.JAVA_skill',
+      'u.PYTHON_skill'
+
     )
     .where(filter)
     .first();
+    console.log('Users',singleUser);
   return singleUser;
 }
 const updateUser = async (changes, id) => {

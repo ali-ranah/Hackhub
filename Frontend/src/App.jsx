@@ -19,6 +19,7 @@ import ChatBot from './Components/AI Bot/ChatBot'
 import Compiler from './Components/Compiler/Compiler'
 import SubmissionPage from './Components/Hackathons/SubmissionPage'
 import GradeProject from './Components/Hackathons/GradeProject'
+import Par_Update from './Components/Participant/Par_UpdateProfile'
 
 
 function App() {
@@ -32,7 +33,7 @@ function App() {
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<Signup />} />
         <Route path='/organizer/profile/update-profile' element={<Update />} />
-        <Route path='/participant/profile/update-profile' element={<Update />} />
+        <Route path='/participant/profile/update-profile' element={<Par_Update />} />
         {/* <Route path='/forgot-password' element={<ForgotPassword />} />
         <Route path='/reset-password' element={<ResetPassword />} /> */}
         {selectedRole && (

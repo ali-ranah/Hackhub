@@ -110,9 +110,12 @@ label="Select Role"
     </Select.Option>
   ))}
 </Select> */}
+         <div className='flex items-center justify-center'>
+
           <Button type="submit" color="black" size="lg">
             Sign in
           </Button>
+          </div>
         </form>
         <div className="text-center">
           <span className="text-gray-600">Don't have an account?</span>{' '}
