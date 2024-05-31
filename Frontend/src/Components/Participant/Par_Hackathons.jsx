@@ -106,7 +106,11 @@ useEffect(() => {
     } catch (error) {
       if (error.response && error.response.status === 500) {
         toast.error('Already participated in this event');
-      } else {
+      }
+      else if (error.response && error.response.status === 400) {
+        toast.error('Event is full');
+      }
+      else {
         console.error('Error registering event:', error);
         toast.error('Error registering event');
       }

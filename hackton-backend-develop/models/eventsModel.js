@@ -11,7 +11,7 @@ module.exports = {
   getByUserId
 };
 
-async function getByUserId(perPage = 100, currentPage = 1, id) {
+async function getByUserId(perPage , currentPage , id) {
   const pagination = {};
   const page = Math.max(currentPage, 1);
   const offset = (page - 1) * perPage;
@@ -111,9 +111,58 @@ async function add(event) {
   return newEvent;
 }
 
+
+
+
+// async function find() {
+//   const foundEvents = await db('events as e')
+//     .join('users as u', 'u.id', 'e.creator_id')
+//     .leftJoin('event_participants as ep', 'ep.event_id', 'e.id')
+//     .select(
+//       'e.id',
+//       'e.event_title',
+//       'e.numberOfParticipants',
+//       'e.start_date',
+//       'e.end_date',
+//       'e.location',
+//       'e.creator_id',
+//       'e.preferedLanguage',
+//       'e.question',
+//       'e.guidelines',
+//       'e.description',
+//       'e.prizeAmount',
+//       'e.allowed_time',
+//       'e.levelOfParticipant',
+//       'u.fullname as organizer_name',
+//       'u.email as organizer_email',
+//       'u.username as organizer_username',
+//       'u.image_url as organizer_profile_pic',
+//       db.raw('COUNT(ep.id) as joinedParticipants')
+//     )
+//     .groupBy('e.id');
+
+//     const totalEvents = foundEvents.length;
+//     const totalRating = foundEvents.reduce((acc, event) => acc + ((event.numberOfParticipants === 0 ? 0 : event.joinedParticipants / event.numberOfParticipants) * 100), 0);
+//     const ratingInEvents = totalEvents > 0 ? totalRating / totalEvents : 0;
+//     console.log(`Rating: ${totalRating}`);
+//     console.log(`Events: ${totalEvents}`);
+//     console.log(`Rating In Events: ${ratingInEvents.toFixed(2)}`);
+
+
+//   const eventsWithAverageRate = foundEvents.map((event) => ({
+//     ...event,
+//     averageRate: (event.numberOfParticipants === 0 ? 0 : event.joinedParticipants / event.numberOfParticipants)*100,
+//     ratingInEvents: ratingInEvents.toFixed(2)
+//   }));
+
+//   return eventsWithAverageRate;
+// }
+
+
 async function find() {
-  const foundEvent = await db('events as e')
-    .join('users as u', ' u.id', 'e.creator_id')
+  const foundEvents = await db('events as e')
+    .join('users as u', 'u.id', 'e.creator_id')
+    .leftJoin('event_participants as ep', 'ep.event_id', 'e.id')
     .select(
       'e.id',
       'e.event_title',
@@ -132,7 +181,27 @@ async function find() {
       'u.fullname as organizer_name',
       'u.email as organizer_email',
       'u.username as organizer_username',
-      'u.image_url as organizer_profile_pic'
-    );
-  return foundEvent;
+      'u.image_url as organizer_profile_pic',
+      db.raw('COUNT(ep.id) as joinedParticipants')
+    )
+    .groupBy('e.id');
+
+  
+  const eventsWithAverageRate = foundEvents.map((event) => ({
+    ...event,
+    averageRate: (event.numberOfParticipants === 0 ? 0 : event.joinedParticipants / event.numberOfParticipants) * 100,
+  }));
+
+
+  const rankedEvents = eventsWithAverageRate
+  .sort((a, b) => b.averageRate - a.averageRate)
+  .map((event, index) => ({
+    ...event,
+    ratingInEventsRank: index + 1
+  }));
+
+  rankedEvents.forEach((event) => {
+    console.log(`Event ID: ${event.id}, Rating Rank: ${event.ratingInEventsRank}`);
+  });
+  return rankedEvents;
 }

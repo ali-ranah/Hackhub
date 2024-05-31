@@ -72,7 +72,11 @@ const Signup = ({ toggleForm }) => {
   
       if (error.response && error.response.status === 409) {
         toast.error('Account with this email already exists, try another email address');
-      } else {
+      }
+      else if(error.response && error.response.status === 408) {
+        toast.error('Account with this username already exists, try another username');
+      }
+       else {
         toast.error('Registration failed');
       }
     }

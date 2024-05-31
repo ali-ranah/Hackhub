@@ -1,10 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { Card, CardBody } from '@material-tailwind/react';
-import { MdDateRange, MdAccessTime, MdOutlineTimer, MdPeople, MdAttachMoney, MdCategory } from 'react-icons/md';
+import { Card, CardBody, Typography } from '@material-tailwind/react';
+import { MdDateRange, MdAccessTime, MdOutlineTimer, MdPeople, MdAttachMoney, MdCategory, MdBook, MdBookOnline, MdTextFields, MdTextFormat, MdTextSnippet, MdErrorOutline, MdError, MdQuestionAnswer, MdTimer } from 'react-icons/md';
 import { HiBadgeCheck } from 'react-icons/hi';
 import { useSelector } from 'react-redux';
 import { selectToken } from '../../State/Reducers/tokenSlice';
 import { AxiosRequest } from '../Axios/AxiosRequest';
+import { FaMedal } from 'react-icons/fa';
+import { RiMedal2Fill, RiMedalFill } from 'react-icons/ri';
+import Medal1 from '../../assets/medal1.png';
+import Medal2 from '../../assets/medal2.png';
+import Medal3 from '../../assets/medal3.png';
+
+
 
 const Home = () => {
   const [events, setEvents] = useState([]);
@@ -13,6 +20,7 @@ const Home = () => {
   const [expandedQuestions, setExpandedQuestions] = useState({});
   const [expandedGuidelines, setExpandedGuidelines] = useState({});
   const [expandedDescriptions, setExpandedDescriptions] = useState({});
+  console.log('Token',token)
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -32,6 +40,8 @@ const Home = () => {
 
     fetchEvents();
   }, []);
+
+  
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -81,6 +91,26 @@ const Home = () => {
     }));
   };
   
+  const getBadgeIcon = (ratingInEventsRank) => {
+    console.log(ratingInEventsRank)
+    if (ratingInEventsRank == 1) {
+      // return <FaMedal size={20} color="gold" />;
+      return <img src={Medal1} className='w-[6vw] md:w-[4vw]'  />;
+
+    } else if (ratingInEventsRank == 2) {
+      // return <RiMedal2Fill size={20} color="silver" />;
+      return <img src={Medal2} className='w-[4vw]'  />;
+
+    } else if (ratingInEventsRank == 3) {
+      // return <RiMedalFill size={20} color="bronze" />;
+      return <img src={Medal3} className='w-[4vw]'  />;
+
+    } else {
+      return null;
+    }
+  };
+  
+
   return (
     <div className="min-h-screen w-full bg-[#14082c]">
       <div className="space-y-8 p-8 dark:bg-gray-800">
@@ -91,9 +121,15 @@ const Home = () => {
               <p className="text-lg font-bold text-white mt-4">No Events Found</p>
             </div>
           ) : (
-            events.map((event) => (
-              <div key={event.id} className="w-full flex mt-4 items-center justify-center">
-                <Card className=' w-3/4 items-center justify-center rounded-2xl hover:shadow-black hover:shadow-2xl transition-transform hover:-translate-y-1'>
+            events.slice() // Create a copy of the array to avoid mutating the original array
+            .sort((a, b) => b.averageRate - a.averageRate) // Sort the events in descending order of averageRate
+            .map((event) => (
+              <div key={event.id} className="w-full flex mt-[2vh] items-center justify-center">
+                <Card className=' w-3/4 items-center justify-center rounded-2xl hover:shadow-black  hover:shadow-2xl transition-transform hover:-translate-y-1'>
+                <div className='mt-[4vh] flex flex-col items-center justify-center text-center space-y-2'>
+                  {getBadgeIcon(event.ratingInEventsRank)}
+                  <Typography color='black' className=''> Average Participation Rate: {event.averageRate}%</Typography>
+                </div>
                   <h2 className="text-lg font-bold text-black mt-2">{event.event_title}</h2>
                   <CardBody className="flex flex-col items-start">
                     <div className="flex items-center">
@@ -113,7 +149,7 @@ const Home = () => {
                       </div>
                     </div>
                     <div className="flex items-center">
-                      <MdOutlineTimer size={20} color='black' />
+                      <MdTimer size={20} color='black' />
                       <div className="ml-2">
                         <p className="text-sm font-bold text-black">
                           Time Allowed: {event.allowed_time} {parseInt(event.allowed_time) === 1 ? 'hour' : 'hours'}
@@ -132,7 +168,7 @@ const Home = () => {
                     </div>
                     {event.question.length <= 50 && (
                                          <div className="flex items-center">
-                                         <MdOutlineTimer size={20} color='black' />
+                                         <MdQuestionAnswer size={20} color='black' />
                                          <div className="ml-2">
                     <p className="text-sm font-bold text-black">Question: {event.question}</p>
                    </div>
@@ -140,7 +176,7 @@ const Home = () => {
                     )}
                     {event.question.length > 50 && (
                                          <div className="flex items-start">
-                                         <MdOutlineTimer size={20} color='black' />
+                                         <MdQuestionAnswer size={20} color='black' />
                                          <div className="ml-2">
                         <p className="text-sm font-bold text-black">
                           Question: {expandedQuestions[event.id] ? event.question : `${event.question.substring(0, 50)}...`}
@@ -156,7 +192,7 @@ const Home = () => {
                     )}
                      {event.guidelines.length <= 50 && (
                       <div className="flex items-center">
-                      <MdOutlineTimer size={20} color='black' />
+                      <MdError size={20} color='black' />
                       <div className="ml-2">
         <p className="text-sm font-bold text-black">Guidelines: {event.guidelines}</p>
         </div>
@@ -164,7 +200,7 @@ const Home = () => {
         )}
                     {event.guidelines.length > 50 && (
                                           <div className="flex items-start">
-                                          <MdOutlineTimer size={20} color='black' />
+                                          <MdError size={20} color='black' />
                                           <div className="ml-2">
                         <p className="text-sm font-bold text-black">
                           Guidelines: {expandedGuidelines[event.id] ? event.guidelines : `${event.guidelines.substring(0, 50)}...`}
@@ -181,7 +217,7 @@ const Home = () => {
                      {event.description.length <= 50 && (
 
                       <div className="flex items-center">
-                      <MdOutlineTimer size={20} color='black' />
+                      <MdTextSnippet size={20} color='black' />
                       <div className="ml-2">
     <p className="text-sm font-bold text-black">Description: {event.description}</p>
   </div>
@@ -189,7 +225,7 @@ const Home = () => {
 )}
                     {event.description.length > 50 && (
                                           <div className="flex items-start">
-                                          <MdOutlineTimer size={20} color='black' />
+                                          <MdTextSnippet size={20} color='black' />
                                           <div className="ml-2">
                         <p className="text-sm font-bold text-black">
                           Description: {expandedDescriptions[event.id] ? event.description : `${event.description.substring(0, 50)}...`}
@@ -212,13 +248,14 @@ const Home = () => {
                       </div>
                     </div>
                     <div className="flex items-center">
-                      <MdPeople size={20} color='black' />
-                      <div className="ml-2">
-                        <p className="text-sm font-bold text-black">
-                          Participants Allowed: {event.numberOfParticipants}
-                        </p>
-                      </div>
-                    </div>
+                    <MdPeople size={20} color='black' />
+        <div className="ml-2">
+          <p className="text-sm font-bold text-black">
+            Participants : {event.joinedParticipants}/{event.numberOfParticipants}
+          </p>
+        </div>
+      </div>
+                    
                     <div className="flex items-center">
                       <MdCategory size={20} color='black' />
                       <div className="ml-2">

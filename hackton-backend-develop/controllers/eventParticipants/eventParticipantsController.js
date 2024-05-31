@@ -21,13 +21,30 @@ async function handleEventsGetById(req, res) {
 async function handleEventRegistration(req, res) {
   const { userId } = req.decodedToken;
   const { id } = req.params;
+
+  // Check the current number of participants for the event
+  const numberOfParticipants = await db.checkParticipants(id);
+
+  // Fetch the event details to get the maximum number of participants allowed
+  const event = await db.getEventById(id);
+
+
+  console.log("Number of participants", numberOfParticipants);
+  console.log("Event Data is", event.numberOfParticipants);
+  
+  if (numberOfParticipants >= event.numberOfParticipants) {
+    return requestHandler.error(res, 400, 'Event is full');
+  }
+  
+
+  // Add participant if there is still space
   await db
     .addCredentials({
       user_id: userId,
       event_id: id,
-      question:req.body.question,
-      guidelines:req.body.guidelines,
-      description:req.body.description
+      question: req.body.question,
+      guidelines: req.body.guidelines,
+      description: req.body.description
     })
     .then(data => {
       return requestHandler.success(
@@ -45,6 +62,8 @@ async function handleEventRegistration(req, res) {
       );
     });
 }
+
+
 
 async function handleEventDelete(req, res) {
   const { userId } = req.decodedToken;

@@ -23,6 +23,24 @@ async function addCredentials(credentials) {
   return newCredentials;
 }
 
+async function checkParticipants(id) {
+  const count = await db('event_participants')
+    .where('event_id', id)
+    .count('id')
+    .first();
+
+  console.log('Count:', count['count(`id`)']);
+
+  return parseInt(count['count(`id`)'], 10);
+}
+
+
+async function getEventById(id) {
+  const event = await db('events').where('id', id).first();
+  return event;
+}
+
+
 // eslint-disable-next-line camelcase
 async function remove(user_id, event_id) {
   const deleteEvent = await db('event_participants as e')
@@ -83,6 +101,8 @@ module.exports = {
   getByEventId,
   getByUserIdAndEventId,
   addCredentials,
+  checkParticipants,
+  getEventById,
   remove,
   getByUserId
 };

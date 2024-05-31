@@ -42,13 +42,21 @@ module.exports = class UserValidator {
         check
       });
     }
-
+    
     const userEmail = await userModel.getUserBy({ email });
     if (userEmail !== undefined) {
       return requestHandler.error(
         res,
         409,
         `User with email ${email} already exists`
+      );
+    }
+    const usernameExists = await userModel.getUserBy({ username });
+    if (usernameExists !== undefined) {
+      return requestHandler.error(
+        res,
+        408,
+        `Username ${username} is already taken`
       );
     }
 
