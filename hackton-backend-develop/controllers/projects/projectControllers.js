@@ -64,8 +64,8 @@ async function handleprojectEntriesPost(req, res) {
     participant_or_team_name: req.body.participant_or_team_name,
     event_id: id,
     project_writeups: req.body.project_writeups,
-    git_url: req.body.git_url,
-    video_url: req.body.video_url,
+    // git_url: req.body.git_url,
+    // video_url: req.body.video_url,
     submitted_by: userId
   };
   await db
@@ -194,6 +194,11 @@ async function checkForPlagiarism(code) {
     
     plagiarismScore = parseFloat(plagiarismScore).toFixed(2);
     aiContent = parseFloat(aiContent).toFixed(2);
+
+    if (isNaN(plagiarismScore)) {
+      plagiarismScore = parseFloat(0).toFixed(2);
+    }
+    
 
     return { plagiarismScore, aiContent };
   } catch (error) {

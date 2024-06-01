@@ -27,6 +27,7 @@ const Update = () => {
     const { name, value, files } = e.target;
     if (name === 'image_url') {
       const file = files[0];
+      if (!file) return; // Exit early if no file is selected
       setLoading(true);
       if (file.type === 'image/jpeg' || file.type === 'image/png') {
         const data = new FormData();
@@ -66,6 +67,10 @@ const Update = () => {
     e.preventDefault();
     try {
       console.log('Image Url',formData.image_url)
+      if(loading) {
+        toast.warning('Please Wait For Image to Upload.');
+        return;
+      }
       const response = await AxiosRequest.put('/api/users/profile', formData, {
         headers: {
           authorization: token,
@@ -144,9 +149,11 @@ const Update = () => {
             size="md"
             className="focus:ring-0"
           />
-          <Button type="submit" className="">
+          <div className='flex items-center justify-center'>
+          <Button type="submit">
             Save
           </Button>
+          </div>
         </form>
       </div>
     </div>

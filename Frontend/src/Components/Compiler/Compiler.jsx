@@ -80,18 +80,31 @@ useEffect(() => {
       });
       console.log('Response status:', response.data.success);
       console.log('Response message:', response.data.message);
-        toast.success('Project submitted successfully');
-        dispatch(setEventIdAction(null));
-      } catch (error) {
-      if (error.response && error.response.data && error.response.data.message === 'Project already submitted') {
-        toast.error('Project already submitted');
+      toast.success('Project submitted successfully');
+      dispatch(setEventIdAction(null));
+    } catch (error) {
+      if (error.response && error.response.data) {
+        if (error.response.data.message === 'Project already submitted') {
+          toast.error('Project already submitted');
+        } else if (error.response.data.message === 'This event title already exists in the database, please pick a new event title!') {
+          toast.error('This event title already exists in the database, please pick a new event title!');
+        } else if (error.response.data.message === 'This event id cannot be found,please provide a valid event id') {
+          toast.error('This event id cannot be found,please provide a valid event id');
+        } else if (error.response.data.message === 'You are not authorized to do this') {
+          toast.error('You are not authorized to do this');
+        } else if (error.response.data.message.includes('ER_DUP_ENTRY')) {
+          toast.error('This event title already exists in the database');
+        } else {
+          console.error(error.response.data.error || "An error occurred");
+          toast.error('Project Submission Failed');
+        }
       } else {
-        console.error(error.response.data.error || "An error occurred");
+        console.error("An error occurred:", error.message);
         toast.error('Project Submission Failed');
       }
-
     }
   };
+  
   
 
   return (
@@ -114,8 +127,8 @@ useEffect(() => {
       <textarea
         value={code}
         onChange={(e) => setCode(e.target.value)}
-        // onCopy={handleCopyPaste}
-        // onPaste={handleCopyPaste}
+        onCopy={handleCopyPaste}
+        onPaste={handleCopyPaste}
         placeholder="Enter your code here"
         className="p-2 mt-4 bg-white border border-gray-300 rounded-md resize-none  focus:ring-0 focus:border-black "
       ></textarea>

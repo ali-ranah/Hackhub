@@ -14,6 +14,7 @@ const Par_Update = () => {
   const storedToken = localStorage.getItem('token');
   const token = useSelector(selectToken) || storedToken;
   const storedRole = localStorage.getItem('selectedRole');
+  const [loading, setLoading] = useState(false);
   const role = useSelector(selectSelectedRole) || storedRole;
   const navigate = useNavigate();
 
@@ -29,13 +30,13 @@ const Par_Update = () => {
     PYTHON_skill: 0
   });
 
-  const [loading, setLoading] = useState(false);
 
   const handleChange = async (e) => {
     const { name, value, files } = e.target;
     if (name === 'image_url') {
       const file = files[0];
-      setLoading(true);
+      if (!file) return; // Exit early if no file is selected
+       setLoading(true);
       if (file.type === 'image/jpeg' || file.type === 'image/png') {
         const data = new FormData();
         data.append('file', file);
@@ -81,7 +82,7 @@ const Par_Update = () => {
     e.preventDefault();
     try {
       console.log('Form Data', formData);
-      if(!formData.image_url) {
+      if(loading) {
         toast.warning('Please Wait For Image to Upload.');
         return;
       }
@@ -179,7 +180,7 @@ const Par_Update = () => {
             </div>
           ))}
           <div className='flex justify-center items-center'>
-          <Button type="submit" className="">
+          <Button type="submit">
             Save
           </Button>
           </div>

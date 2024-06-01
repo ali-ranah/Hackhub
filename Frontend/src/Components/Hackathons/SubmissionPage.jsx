@@ -73,6 +73,16 @@ const SubmissionPage = () => {
     }
   };
   
+  const handleGradeButtonClick = (submissionId, projectId, event_id, plagiarismScore, aiContent) => {
+    navigate(`/organizer/grade/${submissionId}`, {
+      state: {
+        projectId,
+        event_id,
+        plagiarismScore,
+        aiContent
+      }
+    });
+  };
   
   
 
@@ -118,10 +128,15 @@ const SubmissionPage = () => {
                       <>
                             <p><strong>Average Plagiarism Score:</strong> {project.plagiarism_score.plagiarismScore}</p>
                             <p><strong>AI Content:</strong> {project.plagiarism_score.aiContent}</p>
-                        <Button className="bg-black text-sm mt-6" onClick={() => navigate(`/organizer/grade/${project.submitted_by}`, { state: { projectId: project.id, event_id: project.event_id, plagiarismScore: project.plagiarism_score.plagiarismScore, aiContent: project.plagiarism_score.aiContent } })}>Grade Project</Button>
+                            <div className='flex items-center justify-center'>
+                        <Button className="bg-black text-sm mt-6"   onClick={() => handleGradeButtonClick(project.submitted_by, project.id, project.event_id, project.plagiarism_score.plagiarismScore, project.plagiarism_score.aiContent)}>Grade Project</Button>
+                        {/* onClick={() => navigate(`/organizer/grade/${project.submitted_by}`, { state: { projectId: project.id, event_id: project.event_id, plagiarismScore: project.plagiarism_score.plagiarismScore, aiContent: project.plagiarism_score.aiContent } })} */}
+                        </div>
                       </>
                     ) : (
+                      <div className='flex items-center justify-center'>
                       <Button className="bg-black text-sm mt-6" onClick={() => handleClick(project.event_id, project.submitted_by)}>Check Plagiarism Score</Button>
+                      </div>
                     )}
                   </>
                 )}

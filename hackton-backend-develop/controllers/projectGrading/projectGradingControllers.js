@@ -108,7 +108,7 @@ async function handleprojectGradingPost(req, res) {
     const aiContentPercentage = req.body.aicontent; // Example AI content percentage
     const plagiarismPercentage = req.body.plagiarism; // Example plagiarism percentage
     const originalGrade = req.body.grade;
-    const adjustedGrade = originalGrade * ((100 - aiContentPercentage) / 100) * ((100 - plagiarismPercentage) / 100);
+    const adjustedGrade = (originalGrade * ((100 - aiContentPercentage) / 100) * ((100 - plagiarismPercentage) / 100)).toFixed(2);
     
     // Include adjusted grade in the projectGrading object
     projectGrading.average_rating = adjustedGrade;
