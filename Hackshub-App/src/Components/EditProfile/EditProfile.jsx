@@ -16,19 +16,7 @@ const EditProfile = () => {
     const navigation = useNavigation();
     const storedToken =  AsyncStorage.getItem('token');
     const storedEmail = AsyncStorage.getItem('email');
-    const [skillValues, setSkillValues] = useState({
-      C_skill: 0,
-      Cpp_skill: 0,
-      JAVA_skill: 0,
-      PYTHON_skill: 0,
-  });
-
-  const skills = [
-    { name: 'C', value: skillValues.C_skill, label: 'C Skill' },
-    { name: 'Cpp', value: skillValues.Cpp_skill, label: 'C++ Skill' },
-    { name: 'JAVA', value: skillValues.JAVA_skill, label: 'Java Skill' },
-    { name: 'PYTHON', value: skillValues.PYTHON_skill, label: 'Python Skill' },
-];
+    
 
     const token = useSelector(selectToken)||storedToken;
     const email = useSelector(selectEmail)||storedEmail;
@@ -74,6 +62,21 @@ const EditProfile = () => {
     const dob = user?.DOB ? new Date(user.DOB).toLocaleDateString('en-GB') : 'Demo DOB';
     const image_url = user?.image_url || 'https://randomuser.me/api/portraits/men/32.jpg';
 
+    const languageSkills = {
+      C_skill: user?.C_skill,
+      Cpp_skill: user?.Cpp_skill,
+      JAVA_skill: user?.JAVA_skill,
+      PYTHON_skill: user?.PYTHON_skill
+    };
+    console.log('LanguageSkills', languageSkills);
+  
+    const languages = [
+      { name: 'C', skill: languageSkills.C_skill },
+      { name: 'C++', skill: languageSkills.Cpp_skill },
+      { name: 'JAVA', skill: languageSkills.JAVA_skill },
+      { name: 'PYTHON', skill: languageSkills.PYTHON_skill }
+    ];
+
     return (
         <View className='flex min-h-screen items-center justify-start  bg-[#14082c]'>
             {loading ? (
@@ -94,18 +97,16 @@ const EditProfile = () => {
                         <Text style={{ color: 'white' }}>{region}</Text>
                         <Text style={{ color: 'white', fontWeight: 'bold' }}>Date of Birth:</Text>
                         <Text className='text-white mb-4'>{dob}</Text>
-                        {skills.map((skill, index) => (
+                        <Text variant="h6" className="font-bold self-center text-white">Language Skills</Text>
+                        {languages.map((language, index) => (
             <View key={index} className='flex flex-row gap-2 '>
-                <Text style={{ marginRight: 10, color: 'white' }}>{skill.label}:</Text>
+                <Text style={{ marginRight: 10, color: 'white' }}>{language.name}:</Text>
                 <Slider
                     style={{ flex: 1 ,padding:6 }}
                     minimumValue={0}
-                    maximumValue={100}
+                    maximumValue={10}
                     step={1}
-                    value={skill.value}
-                    onValueChange={(value) => {
-                        setSkillValues({ ...skillValues, [skill.name + '_skill']: value });
-                    }}
+                    value={language.skill}
                     enabled={false}
                 />
             </View>

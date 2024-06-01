@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { selectToken } from '../../../State/Reducers/tokenSlice';
 import { selectSelectedRole } from '../../../State/Reducers/roleSlice';
+import Slider from '@react-native-community/slider'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AxiosRequest } from '../Axios/AxiosRequest';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -20,6 +21,10 @@ const UpdateProfile = () => {
     country: '',
     mobile: '',
     region: '',
+    C_skill: 0,
+    Cpp_skill: 0,
+    JAVA_skill: 0,
+    PYTHON_skill: 0,
     dob: new Date(),
   });
   const [loading, setLoading] = useState(false);
@@ -43,8 +48,12 @@ const UpdateProfile = () => {
     });
   };
 
-
-  
+  const handleSliderChange = (language, value) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [language]: value,
+    }));
+  };
 
 const pickFromCamera = async () => {
   const result = await ImagePicker.launchImageLibraryAsync({
@@ -109,11 +118,13 @@ console.log("New File",newFile);
 
 const handleSubmit = async (e) => {
   e.preventDefault();
-  if(!formData.image_url){
-return;
-  }
   try {
+  console.log('Form Data', formData);
     console.log('Image Url',formData.image_url)
+    if(loading) {
+      ToastAndroid.SHORT('Please Wait For Image to Upload.');
+      return;
+    }
     const response = await AxiosRequest.put('/api/users/profile', formData, {
       headers: {
         authorization: token,
@@ -124,7 +135,7 @@ return;
     if (response.status === 200) {
       ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
       setTimeout(() => {
-       navigation.navigate('Profile');
+       navigation.navigate('Home');
       }, 1000);
     } else {
       ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
@@ -162,6 +173,19 @@ return;
         onChangeText={(text) => handleChange('region', text)}
         style={styles.input}
       />
+                <Text variant="h6" className="font-bold text-white">Language Skills</Text>
+                {['C_skill', 'Cpp_skill', 'JAVA_skill', 'PYTHON_skill'].map((language) => (
+            <View key={language} className="mt-2 w-full">
+              <Text className="text-white">{language.replace('_skill', '')}</Text>
+                    <Slider
+                value={formData[language]}
+                onValueChange={(value) => handleSliderChange(language, value)}
+                step={1}
+                minimumValue={0}
+                maximumValue={10}
+              />
+              </View>
+                ))}
       <View>
           <TextInput
     value={formatDate(formData.dob)}
