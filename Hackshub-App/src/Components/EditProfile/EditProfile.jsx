@@ -1,5 +1,6 @@
 import React, { useState, useEffect,useCallback } from 'react';
 import { View, Text, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
+import Slider from '@react-native-community/slider'
 import { Avatar,Button } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useSelector } from 'react-redux';
@@ -15,6 +16,20 @@ const EditProfile = () => {
     const navigation = useNavigation();
     const storedToken =  AsyncStorage.getItem('token');
     const storedEmail = AsyncStorage.getItem('email');
+    const [skillValues, setSkillValues] = useState({
+      C_skill: 0,
+      Cpp_skill: 0,
+      JAVA_skill: 0,
+      PYTHON_skill: 0,
+  });
+
+  const skills = [
+    { name: 'C', value: skillValues.C_skill, label: 'C Skill' },
+    { name: 'Cpp', value: skillValues.Cpp_skill, label: 'C++ Skill' },
+    { name: 'JAVA', value: skillValues.JAVA_skill, label: 'Java Skill' },
+    { name: 'PYTHON', value: skillValues.PYTHON_skill, label: 'Python Skill' },
+];
+
     const token = useSelector(selectToken)||storedToken;
     const email = useSelector(selectEmail)||storedEmail;
 
@@ -79,6 +94,22 @@ const EditProfile = () => {
                         <Text style={{ color: 'white' }}>{region}</Text>
                         <Text style={{ color: 'white', fontWeight: 'bold' }}>Date of Birth:</Text>
                         <Text className='text-white mb-4'>{dob}</Text>
+                        {skills.map((skill, index) => (
+            <View key={index} className='flex flex-row gap-2 '>
+                <Text style={{ marginRight: 10, color: 'white' }}>{skill.label}:</Text>
+                <Slider
+                    style={{ flex: 1 ,padding:6 }}
+                    minimumValue={0}
+                    maximumValue={100}
+                    step={1}
+                    value={skill.value}
+                    onValueChange={(value) => {
+                        setSkillValues({ ...skillValues, [skill.name + '_skill']: value });
+                    }}
+                    enabled={false}
+                />
+            </View>
+        ))}
                         <Button
                             icon={() => <MaterialCommunityIcons name="pencil" size={24} color="white" />}
                             mode="contained"

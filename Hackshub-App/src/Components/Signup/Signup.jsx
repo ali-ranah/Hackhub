@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text,   SafeAreaView,ScrollView ,TextInput, Button, TouchableOpacity,ToastAndroid } from 'react-native';
+import { View, Text,   SafeAreaView,ScrollView ,TextInput,StyleSheet, Button, TouchableOpacity,ToastAndroid } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome5'
@@ -203,7 +203,9 @@ console.log('Registration successful');
           ))}
         </Picker> */}
                 <View className="text-center flex items-center justify-center mt-10 space-y-2">
-        <Button title="Sign up" onPress={handleSubmit} color='black' />
+                <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+                <Text className='text-white font-bold'>Sign up</Text>
+</TouchableOpacity>        
         <Text className="text-gray-600">Already have an account? </Text>
         <TouchableOpacity  onPress={() => navigation.navigate('Login')}>
           <Text className='text-[#14082c] font-bold'>Sign in instead</Text>
@@ -214,5 +216,16 @@ console.log('Registration successful');
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  button: {
+    backgroundColor: 'black',
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    marginVertical: 10,
+  }
+});
+
 
 export default Signup;

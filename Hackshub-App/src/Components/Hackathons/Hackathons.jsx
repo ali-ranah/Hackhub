@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ActivityIndicator, ScrollView } from 'react-native';
+import { View, Text, ActivityIndicator, ScrollView,StyleSheet,TouchableOpacity } from 'react-native';
 import { useSelector } from 'react-redux';
 import { selectToken } from '../../../State/Reducers/tokenSlice';
 import { AxiosRequest } from '../Axios/AxiosRequest';
@@ -81,10 +81,10 @@ const Hackathons = () => {
             </View>
             <Text className="text-lg text-white">Page {currentPage} of {totalPages}</Text>
         </View>
-        <Table borderStyle={{borderWidth:1, borderColor:'white'}} className='w-[90vw]'>
-          <Row textStyle={{color:'white',padding:10}} data={['ID', 'Title', 'Start Date', 'End Date', 'Status']}  />
+        <Table borderStyle={styles.tableBorder} className={'w-[90vw]'}>
+          <Row textStyle={styles.tableText}   data={['ID', 'Title', 'Start Date', 'End Date', 'Status']}  />
           {events.map((item, index) => (
-            <Row textStyle={{color:'white',padding:10}} key={item.id} data={[eventStartIndex + index, item.event_title, formatDate(item.start_date), formatDate(item.end_date), new Date() < new Date(item.start_date) ? 'Not Started Yet' : new Date() <= new Date(item.end_date) ? 'Ongoing' : 'Completed']} />
+            <Row textStyle={styles.tableText}    key={item.id} data={[eventStartIndex + index, item.event_title, formatDate(item.start_date), formatDate(item.end_date), new Date() < new Date(item.start_date) ? 'Not Started Yet' : new Date() <= new Date(item.end_date) ? 'Ongoing' : 'Completed']} />
           ))}
         </Table>
         {Array.isArray(events) && events.length === 0 && (
@@ -96,5 +96,17 @@ const Hackathons = () => {
     </View>
   );
 };
+
+
+const styles = StyleSheet.create({
+  tableBorder: {
+    borderWidth: 2,
+    borderColor: 'white',
+  },
+  tableText: {
+    color: 'white',
+    padding:10
+  }
+});
 
 export default Hackathons;

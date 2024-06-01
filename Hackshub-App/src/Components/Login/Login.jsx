@@ -1,5 +1,5 @@
 import React, { useState,useEffect } from 'react';
-import { View, Text, TextInput, Button, TouchableOpacity, ToastAndroid } from 'react-native';
+import { View, Text, TextInput, Button,StyleSheet, TouchableOpacity, ToastAndroid } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch } from 'react-redux';
 import { setEmailAction } from '../../../State/Reducers/emailSlice';
@@ -102,8 +102,9 @@ const Login = () => {
         </View>
 
         <View className="text-center flex items-center justify-center mt-10 space-y-2">
-          <Button title="Sign in" onPress={handleSubmit} color='black' />
-
+          <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+            <Text className='text-white font-bold'>Sign in</Text>
+          </TouchableOpacity>
           <Text className="text-gray-600">Don't have an account?</Text>
           <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
             <Text className='text-[#14082c] font-bold'>Sign up instead</Text>
@@ -113,5 +114,16 @@ const Login = () => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  button: {
+    backgroundColor: 'black',
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    marginVertical: 10,
+  }
+});
+
 
 export default Login;
