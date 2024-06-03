@@ -28,13 +28,6 @@ const checkInput = inputValue => {
       }
     }
 
-    // if (key === 'participation_type') {
-    //   if (!['individual', 'team', 'both'].includes(inputValue[key])) {
-    //     errors[
-    //       key
-    //     ] = `please pick between these three options for participation type ['individual','team','both']`;
-    //   }
-    // }
 
     if (key === 'id' || key === 'category_id' || key === 'project_id') {
       if (!validator.isNumeric(String(inputValue[key]))) {

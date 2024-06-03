@@ -90,8 +90,18 @@ try {
   navigate('/organizer/hackathons')
 } catch (error) {
   console.error(error); // Log any errors
+  console.log('Error',error.response, error.response.data,error.response.data.message); // Log any errors
   if (error.response && error.response.data && error.response.data.message === "This event title already exists in the database, please pick a new event title!") {
     toast.error('Event Title Already Exists');
+  }
+  else if (error.response && error.response.data && error.response.data.message.event_title === "event_title must be between 10 to 100 characters") {
+    toast.error('Event Title Must Be Between 10 to 50 Characters');
+  }
+  else if (error.response && error.response.data && error.response.data.message.event_description === "event_description must be between 10 to 100 characters") {
+    toast.error('Event Description Must Be Between 10 to 100 Characters');
+  }
+  else if (error.response && error.response.data && error.response.data.message.guidelines === "guidelines must be between 10 to 100 characters") {
+    toast.error('Guidelines Must Be Between 10 to 100 Characters');
   }
 
 }

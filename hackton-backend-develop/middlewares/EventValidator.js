@@ -121,6 +121,7 @@ module.exports = class EventValidator {
       prizeAmount,
       levelOfParticipant            
     });
+    console.log('Check',check);
 
     if (Object.keys(check).length > 0) {
       return requestHandler.error(res, 400, check);
