@@ -20,6 +20,8 @@ router.post('/register', UserValidator.userInput, register);
 router.post('/register/:id', UserValidator.userInput, register);
 
 router.post('/login', UserValidator.userLogin, Login);
+router.post('/login/participant', UserValidator.userLoginParticipant, Login);
+
 
 router.route('/forgotpassword').post(UserValidator.inviteInput, passwordReset);
 router.route('/resetpassword').patch(UserValidator.validateToken, newPassword);

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity,Image } from 'react-native';
 import { Card } from 'react-native-paper';
 import { MaterialIcons, FontAwesome } from '@expo/vector-icons';
 import { useSelector } from 'react-redux';
+import { useIsFocused } from '@react-navigation/native';
 import { selectToken } from '../../../State/Reducers/tokenSlice';
 import { AxiosRequest } from '../Axios/AxiosRequest';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -35,6 +36,7 @@ const Home = () => {
   const [events, setEvents] = useState([]);
   const storedToken = AsyncStorage.getItem('token');
   const token = useSelector(selectToken) || storedToken;
+  const isFocused = useIsFocused();
   console.log("Token: " , token);
 
   useEffect(() => {
@@ -53,7 +55,7 @@ const Home = () => {
     };
 
     fetchEvents();
-  }, []);
+  }, [isFocused]);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -82,15 +84,32 @@ const Home = () => {
     }
   };
 
+  const getBadgeIcon = (ratingInEventsRank) => {
+    if (ratingInEventsRank == 1) {
+      return <Image source={require('../../../assets/medal1.png')} style={{ width: 40, height: 40 }} />;
+    } else if (ratingInEventsRank == 2) {
+      return <Image source={require('../../../assets/medal2.png')} style={{ width: 40, height: 40 }} />;
+    } else if (ratingInEventsRank == 3) {
+      return <Image source={require('../../../assets/medal3.png')} style={{ width: 40, height: 40 }} />;
+    } else {
+      return null;
+    }
+  };
+  
+
   return (
     <View className='min-h-screen w-full bg-[#14082c]'>
       <View className="space-y-8 p-8 dark:bg-gray-800">
         <View className="flex flex-col mb-[3vh] items-center justify-center">
           {events.map((event) => (
-            <View key={event.id} className="w-full flex mb-2 items-center justify-center">
+            <View key={event.id} className="w-full flex mb-[2vh] items-center justify-center">
               <Card className='w-full items-start justify-center rounded-2xl hover:shadow-black hover:shadow-2xl transition-transform hover:-translate-y-1'>
-                <Card.Content className="flex flex-col items-start">
-                <Text className="text-lg font-bold self-center mb-[2vh] text-black">{event.event_title}</Text>
+              <View className='mt-[2vh] flex flex-col  items-center justify-center text-center'>
+              {getBadgeIcon(event.ratingInEventsRank)}
+              <Text className='text-sm font-bold text-black'>Average Participation Rate: {event.averageRate}%</Text>
+                </View>
+                <Card.Content className="flex flex-col items-start p-10 ">
+                <Text className="text-lg font-bold !self-center mb-[1vh] text-black">{event.event_title}</Text>
                   <View className='flex-row'>
                     <MaterialIcons name="date-range" size={20} color="black" />
                      <Text className="text-sm font-bold text-black">
@@ -138,7 +157,7 @@ const Home = () => {
                   <View className='flex-row'>
                     <MaterialIcons name="people" size={20} color="black" />
                     <Text className="text-sm font-bold text-black">
-                      Participants Allowed: {event.numberOfParticipants}
+                    Participants : {event.joinedParticipants}/{event.numberOfParticipants}
                     </Text>
                   </View>
                   <View className='flex-row'>

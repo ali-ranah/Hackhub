@@ -146,6 +146,50 @@ module.exports = class UserValidator {
     }
   }
 
+  static async userLoginParticipant(req, res, next) {
+    const { password, email } = req.body;
+    try {
+        const check = checkItem({
+            email,
+            password,
+        });
+        if (Object.keys(check).length > 0) {
+            return res.status(400).json({
+                statusCode: 400,
+                check
+            });
+        }
+        const returnUser = await userModel.getUserBy({ email });
+
+        if (returnUser && returnUser.password && returnUser.role === 'Participant') {
+            const checkPassword = await bcrypt.compareSync(
+                password,
+                returnUser.password
+            );
+            if (checkPassword) {
+                req.checked = returnUser;
+                next();
+            }
+        } else {
+            return res.status(404).json({
+                statusCode: 404,
+                message: 'User is not a participant'
+            });
+        }
+
+        return res.status(400).json({
+            statusCode: 400,
+            message: 'Wrong credentials'
+        });
+    } catch (err) {
+        return res.status(500).json({
+            statusCode: 500,
+            message: err.message || 'Internal server error'
+        });
+    }
+}
+
+
   static async userProfile(req, res, next) {
     try {
       const { email, username, fullname, bio } = req.body;

@@ -122,7 +122,7 @@ const handleSubmit = async (e) => {
   console.log('Form Data', formData);
     console.log('Image Url',formData.image_url)
     if(loading) {
-      ToastAndroid.SHORT('Please Wait For Image to Upload.');
+      ToastAndroid.show('Please Wait For Image to Upload.', ToastAndroid.SHORT);
       return;
     }
     const response = await AxiosRequest.put('/api/users/profile', formData, {
@@ -149,12 +149,12 @@ const handleSubmit = async (e) => {
 
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Update Profile</Text>
-      <Button title="Select Image" onPress={pickFromCamera} />
-      {formData.image_url ? (
-        <Image source={{ uri: formData.image_url }} style={styles.image} />
-      ) : null}
+    <View className="h-full flex items-center justify-center bg-[#14082c] py-6 px-4 ">
+      <View className="flex flex-col mb-[3vh] w-full items-center justify-center">
+      <Text className="mt-6 text-center text-2xl mb-[2vh] font-bold text-white">Update Profile</Text>
+      <TouchableOpacity style={styles.button} onPress={pickFromCamera} >
+<Text className='text-white font-bold'>Select Image</Text>
+      </TouchableOpacity>
       <TextInput
         placeholder="Country"
         value={formData.country}
@@ -186,16 +186,16 @@ const handleSubmit = async (e) => {
               />
               </View>
                 ))}
-      <View>
+            <View className="mt-2 w-full">
           <TextInput
     value={formatDate(formData.dob)}
     editable={false}
     style={styles.input1}
     />
-  <View className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer">
+  <View className="absolute inset-y-0 right-0 top-2 flex items-center pr-3 cursor-pointer">
 
 <TouchableOpacity onPress={() => setShowDatePicker(true)} className='p-3'>
-  <MaterialIcons name="calendar-today"  color="black"  />
+  <MaterialIcons name="calendar-today"  color="black" size={20} />
  
 </TouchableOpacity>
             </View>
@@ -213,18 +213,24 @@ const handleSubmit = async (e) => {
   />
 )}
 </View>
-      <Button title="Save" onPress={handleSubmit} />
+      <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+        <Text className='text-white font-bold'>Save</Text>
+        </TouchableOpacity>
+    </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    display: 'flex',
+    flexDirection:'column',
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
     backgroundColor: '#14082c',
+    gap:4
   },
   title: {
     fontSize: 24,
@@ -256,6 +262,16 @@ const styles = StyleSheet.create({
     height: 200,
     marginVertical: 20,
   },
+  button: {
+    backgroundColor: 'blue',
+    padding: 4,
+    width:'25%',
+    height:'8%',
+    borderRadius: 5,
+    alignItems: 'center',
+    justifyContent:'center',
+    marginVertical: 10,
+  }
 });
 
 export default UpdateProfile;

@@ -45,7 +45,7 @@ const Login = () => {
         await AsyncStorage.setItem('password', password);
       }
 
-      const response = await AxiosRequest.post('/api/auth/login', { email, password, role });
+      const response = await AxiosRequest.post('/api/auth/login/participant', { email, password, role });
 
       const token = response.data.body.token;
       console.log('token', token);
@@ -60,7 +60,10 @@ const Login = () => {
     } catch (error) {
       if (error.response && error.response.status === 400) {
         ToastAndroid.show('Invalid Email or Password', ToastAndroid.SHORT);
-      } else {
+      }else if (error.response && error.response.status === 404) {
+        ToastAndroid.show('Not A Participant, Please Enter Registered Participant Account', ToastAndroid.SHORT);
+      }
+       else {
         ToastAndroid.show('Login failed', ToastAndroid.SHORT);
       }
     }

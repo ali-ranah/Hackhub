@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Card, CardBody, Typography } from '@material-tailwind/react';
-import { MdDateRange, MdAccessTime, MdOutlineTimer, MdPeople, MdAttachMoney, MdCategory, MdBook, MdBookOnline, MdTextFields, MdTextFormat, MdTextSnippet, MdErrorOutline, MdError, MdQuestionAnswer, MdTimer } from 'react-icons/md';
+import { MdDateRange, MdAccessTime, MdPeople, MdAttachMoney, MdCategory, MdTextSnippet, MdError, MdQuestionAnswer, MdTimer } from 'react-icons/md';
 import { HiBadgeCheck } from 'react-icons/hi';
 import { useSelector } from 'react-redux';
 import { selectToken } from '../../State/Reducers/tokenSlice';
 import { AxiosRequest } from '../Axios/AxiosRequest';
-import { FaMedal } from 'react-icons/fa';
-import { RiMedal2Fill, RiMedalFill } from 'react-icons/ri';
 import Medal1 from '../../assets/medal1.png';
 import Medal2 from '../../assets/medal2.png';
 import Medal3 from '../../assets/medal3.png';
