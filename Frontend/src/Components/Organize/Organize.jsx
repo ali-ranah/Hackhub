@@ -94,7 +94,7 @@ try {
   if (error.response && error.response.data && error.response.data.message === "This event title already exists in the database, please pick a new event title!") {
     toast.error('Event Title Already Exists');
   }
-  else if (error.response && error.response.data && error.response.data.message.event_title === "event_title must be between 10 to 100 characters") {
+  else if (error.response && error.response.data && error.response.data.message.event_title === "event_title must be between 10 to 50 characters") {
     toast.error('Event Title Must Be Between 10 to 50 Characters');
   }
   else if (error.response && error.response.data && error.response.data.message.event_description === "event_description must be between 10 to 100 characters") {

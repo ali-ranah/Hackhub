@@ -131,16 +131,16 @@ const updateUserProfile = async (req, res) => {
 
       // Allow participants to update additional fields
       if (foundUser.role === 'Participant') {
-        if (formData.C_skill !== 0) {
+        if (formData.C_skill !== undefined && formData.C_skill !== 0) {
           updates.C_skill = formData.C_skill;
         }
-        if (formData.Cpp_skill !== 0) {
+        if (formData.Cpp_skill !== undefined && formData.Cpp_skill !== 0) {
           updates.Cpp_skill = formData.Cpp_skill;
         }
-        if (formData.JAVA_skill !== 0) {
+        if (formData.JAVA_skill !== undefined && formData.JAVA_skill !== 0) {
           updates.JAVA_skill = formData.JAVA_skill;
         }
-        if (formData.PYTHON_skill !== 0) {
+        if (formData.PYTHON_skill !== undefined && formData.PYTHON_skill !== 0) {
           updates.PYTHON_skill = formData.PYTHON_skill;
         }
       }
@@ -179,6 +179,10 @@ const updateUserProfile = async (req, res) => {
       }
       if (formData.dob && formData.dob !== foundUser.DOB) {
         updates.DOB = formData.dob;
+      }
+
+      if (Object.keys(updates).length === 0) {
+        return requestHandler.error(res, 400, 'No valid fields to update');
       }
 
       const userUpdates = await userModel.updateUser(updates, userId);

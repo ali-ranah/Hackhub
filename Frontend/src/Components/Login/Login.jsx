@@ -96,20 +96,6 @@ const Login = ({ toggleForm }) => {
     {showPassword ? <FaEyeSlash /> : <FaEye />}
   </div>
 </div>
- {/* <Select
-variant="outlined"       
-label="Select Role"
-  value={role}
-  onChange={(value) => dispatch(setSelectedRole(value))}
-  size="md"
-  className="focus:ring-0"
->
-  {roleOptions.map((option) => (
-    <Select.Option key={option} value={option}>
-      {option}
-    </Select.Option>
-  ))}
-</Select> */}
          <div className='flex items-center justify-center'>
 
           <Button type="submit" color="black" size="lg">

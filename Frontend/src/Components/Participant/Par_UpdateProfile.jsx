@@ -86,7 +86,23 @@ const Par_Update = () => {
         toast.warning('Please Wait For Image to Upload.');
         return;
       }
-      const response = await AxiosRequest.put('/api/users/profile', formData, {
+      const filteredFormData = {
+        ...formData,
+        C_skill: formData.C_skill > 0 ? formData.C_skill : undefined,
+        Cpp_skill: formData.Cpp_skill > 0 ? formData.Cpp_skill : undefined,
+        JAVA_skill: formData.JAVA_skill > 0 ? formData.JAVA_skill : undefined,
+        PYTHON_skill: formData.PYTHON_skill > 0 ? formData.PYTHON_skill : undefined,
+      };
+  
+      // Remove undefined properties
+      Object.keys(filteredFormData).forEach(key => {
+        if (filteredFormData[key] === undefined) {
+          delete filteredFormData[key];
+        }
+      });
+      console.log('Filtered Form Data', filteredFormData);
+      
+      const response = await AxiosRequest.put('/api/users/profile', filteredFormData, {
         headers: {
           authorization: token,
           'Content-Type': 'application/json',
@@ -102,8 +118,13 @@ const Par_Update = () => {
         toast.error(response.data.message);
       }
     } catch (error) {
+      if (error.response.status === 400 && error.response.data.message === 'No valid fields to update'){
+        toast.warning(error.response.data.message);
+       }
+     else{ 
       console.error('Error:', error);
       toast.error('An error occurred. Please try again later.');
+      }
     }
   };
 

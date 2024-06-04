@@ -78,7 +78,7 @@ const Update = () => {
         },
       });
 
-      if (response.status === 200) {
+      if (response && response.status === 200) {
         toast.success(response.data.message);
         setTimeout(() => {
          navigate(`/${role.toLowerCase()}/profile`);
@@ -87,8 +87,13 @@ const Update = () => {
         toast.error(response.data.message);
       }
     } catch (error) {
-      console.error('Error:', error);
-      toast.error('An error occurred. Please try again later.');
+      if (error.response.status === 400 && error.response.data.message === 'No valid fields to update'){
+        toast.warning(error.response.data.message);
+       }
+       else{
+       console.error('Error:', error);
+       toast.error('An error occurred. Please try again later.');
+       }
     }
   };
 
