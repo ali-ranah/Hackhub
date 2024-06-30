@@ -37,7 +37,9 @@ const {
   handleProjectGradingEdit,
   handleGetAllProjectGrading,
   handleGetProjectGrading,
-  handleProjectGradingDelete
+  handleProjectGradingDelete,
+  handleGetTopGradedProjects,
+  handleGetTopPlagiarismAndAIContent
 } = require('../controllers/projectGrading/projectGradingControllers');
 
 const {
@@ -198,6 +200,20 @@ router.get(
   EventValidator.validateProjectID,
   handleGetProjectGrading
 );
+
+router.get(
+  '/:id/projects/top-graded',
+  authenticate,
+  EventValidator.validateID,
+  handleGetTopGradedProjects
+)
+
+router.get(
+  '/:id/projects/top-plagiarism-ai-content',
+  authenticate,
+  EventValidator.validateID,
+  handleGetTopPlagiarismAndAIContent
+)
 
 router.get(
   '/:id/projects/grading',

@@ -158,16 +158,16 @@ module.exports = class EventValidator {
   static async projectValidation(req, res, next) {
     const { id } = req.params;
     const { project_title, participant_or_team_name } = req.body;
-    if (!id) {
-      const exists = await projectModel.findProjectTitle(project_title);
-      if (exists.length !== 0) {
-        return requestHandler.error(
-          res,
-          409,
-          'This event title already exists in the database, please pick a new event title!'
-        );
-      }
-    }
+    // if (!id) {
+    //   const exists = await projectModel.findProjectTitle(project_title);
+    //   if (exists.length !== 0) {
+    //     return requestHandler.error(
+    //       res,
+    //       409,
+    //       'This event title already exists in the database, please pick a new event title!'
+    //     );
+    //   }
+    // }
     const check = checkItem({
       project_title,
       participant_or_team_name

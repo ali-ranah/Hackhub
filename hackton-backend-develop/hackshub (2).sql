@@ -319,7 +319,6 @@ ALTER TABLE `participant_team_members`
 --
 ALTER TABLE `project_entries`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `project_entries_project_title_unique` (`project_title`) USING HASH,
   ADD KEY `project_entries_submitted_by_foreign` (`submitted_by`),
   ADD KEY `project_entries_event_id_foreign` (`event_id`);
 

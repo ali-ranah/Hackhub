@@ -112,7 +112,7 @@ async function handleprojectGradingPost(req, res) {
     
     // Include adjusted grade in the projectGrading object
     projectGrading.average_rating = adjustedGrade;
-    projectGrading.plagiarism = plagiarismPercentage;
+    projectGrading.plagiarism_score = plagiarismPercentage;
     projectGrading.ai_content = aiContentPercentage;
  
 
@@ -162,10 +162,53 @@ async function handleGetProjectGrading(req, res) {
     });
 }
 
+async function handleGetTopGradedProjects(req, res) {
+  try {
+    const limit = 10;
+    // Retrieve top graded projects based on average ratings
+    const topGradedProjects = await db.findTopGradedProjects(limit);
+
+    // Return success response with the data
+    return requestHandler.success(
+      res,
+      200,
+      'Top graded projects retrieved successfully',
+      topGradedProjects
+    );
+  } catch (error) {
+    // Handle errors
+    return requestHandler.error(res, 500, `Server error: ${error.message}`);
+  }
+}
+
+async function handleGetTopPlagiarismAndAIContent(req, res) {
+  try {
+    const topPlagiarism = await db.findTopPlagiarismProject();
+    const topAIContent = await db.findTopAIContentProject();
+
+    const response = {
+      topPlagiarism,
+      topAIContent,
+    };
+
+    return requestHandler.success(
+      res,
+      200,
+      'Top plagiarism and AI content projects retrieved successfully',
+      response
+    );
+  } catch (error) {
+    return requestHandler.error(res, 500, `Server error: ${error.message}`);
+  }
+}
+
+
 module.exports = {
   handleprojectGradingPost,
   handleGetAllProjectGrading,
   handleGetProjectGrading,
+  handleGetTopPlagiarismAndAIContent,
+  handleGetTopGradedProjects,
   handleProjectGradingEdit,
   handleProjectGradingDelete
 };
