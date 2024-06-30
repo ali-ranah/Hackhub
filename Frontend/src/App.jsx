@@ -20,6 +20,7 @@ import Compiler from './Components/Compiler/Compiler'
 import SubmissionPage from './Components/Hackathons/SubmissionPage'
 import GradeProject from './Components/Hackathons/GradeProject'
 import Par_Update from './Components/Participant/Par_UpdateProfile'
+import EventDetails from './Components/Participant/EventDetails'
 
 
 function App() {
@@ -60,6 +61,7 @@ function App() {
                     <Route path='hackathons' element={<Par_Hackathons />} />
                     <Route path='profile' element={<Par_UserProfile />} />
                     <Route path='ai-bot' element={<ChatBot />} /> 
+                    <Route path="event-details/:eventId" element={<EventDetails />} />
                     <Route path='compiler/:eventId' element={< Compiler/>} />
                   </Routes>
                 </ParticipantLayout>

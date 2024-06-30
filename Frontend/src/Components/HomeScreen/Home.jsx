@@ -164,7 +164,7 @@ const Home = () => {
                         </p>
                       </div>
                     </div>
-                    {event.question.length <= 50 && (
+                    {/* {event.question.length <= 50 && (
                                          <div className="flex items-center">
                                          <MdQuestionAnswer size={20} color='black' />
                                          <div className="ml-2">
@@ -187,7 +187,7 @@ const Home = () => {
                         </span>
                       </div>
                       </div>
-                    )}
+                    )} */}
                      {event.guidelines.length <= 50 && (
                       <div className="flex items-center">
                       <MdError size={20} color='black' />
@@ -212,7 +212,7 @@ const Home = () => {
                       </div>
                       </div>
                     )}
-                     {event.description.length <= 50 && (
+                     {/* {event.description.length <= 50 && (
 
                       <div className="flex items-center">
                       <MdTextSnippet size={20} color='black' />
@@ -236,7 +236,7 @@ const Home = () => {
                         </span>
                       </div>
                       </div>
-                    )}
+                    )} */}
                     <div className="flex items-center">
                       <MdAttachMoney size={20} color='black' />
                       <div className="ml-2">

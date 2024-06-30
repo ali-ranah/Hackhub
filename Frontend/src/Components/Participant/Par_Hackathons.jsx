@@ -60,10 +60,11 @@ useEffect(() => {
                       console.log('Grading data',gradingData);
                   }
               }
-              updatedEvents.push({ ...event, registered: isRegistered, projectDataLength, gradingData });
+              updatedEvents.push({ ...event, registered: isRegistered ,projectDataLength, gradingData });
           }
 
           setEvents(updatedEvents);
+          console.log('Updated events',updatedEvents);
           setLoadingEvents(false);
       } catch (error) {
           console.error('Error fetching events:', error);
@@ -122,6 +123,10 @@ useEffect(() => {
     navigate(`/participant/compiler/${eventId}`);
   };
 
+  const handleEventDetails = (eventId) => {
+    navigate(`/participant/event-details/${eventId}`);
+  };
+
   return (
     <>
       <div className="min-h-screen min-w-screen flex items-start justify-center bg-[#14082c] py-12 px-4 sm:px-6 lg:px-8">
@@ -151,6 +156,7 @@ useEffect(() => {
                       <>
                     <th className="px-6 py-3 text-left text-xs font-medium text-white dark:text-gray-300 uppercase tracking-wider">Grade</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-white dark:text-gray-300 uppercase tracking-wider">Plagiarism</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-white dark:text-gray-300 uppercase tracking-wider">Comments</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-white dark:text-gray-300 uppercase tracking-wider">AI Content</th>
                     </>
                     )}
@@ -161,7 +167,9 @@ useEffect(() => {
                   {Array.isArray(events) && events.map((event, index) => (
                     <tr key={event.id} className="dark:hover:bg-gray-700">
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-white dark:text-gray-200">{++index}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-white dark:text-gray-200">{event.event_title}</td>
+<td className="px-6 py-4 whitespace-nowrap hover:text-blue-400 text-sm text-white dark:text-gray-200 cursor-pointer" onClick={() => handleEventDetails(event.id)}>
+{event.event_title}
+</td> 
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-white dark:text-gray-200">{formatDate(event.start_date)}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-white dark:text-gray-200">{formatDate(event.end_date)}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-white dark:text-gray-200">
@@ -172,11 +180,13 @@ useEffect(() => {
     {event.gradingData && event.gradingData.length > 0 ? (
       <>
         <td className="px-6 py-4 whitespace-nowrap text-sm text-white dark:text-gray-200">{event.gradingData[0].average_rating}</td>
-        <td className="px-6 py-4 whitespace-nowrap text-sm text-white dark:text-gray-200">{event.gradingData[0].plagiarism}</td>
+        <td className="px-6 py-4 whitespace-nowrap text-sm text-white dark:text-gray-200">{event.gradingData[0].plagiarism_score}</td>
+        <td className="px-6 py-4 whitespace-nowrap text-sm text-white dark:text-gray-200">{event.gradingData[0].judge_comments}</td>
         <td className="px-6 py-4 whitespace-nowrap text-sm text-white dark:text-gray-200">{event.gradingData[0].ai_content}</td>
       </>
     ) : (
       <>
+        <td className="px-6 py-4 whitespace-nowrap text-sm text-white dark:text-gray-200">Not found</td>
         <td className="px-6 py-4 whitespace-nowrap text-sm text-white dark:text-gray-200">Not found</td>
         <td className="px-6 py-4 whitespace-nowrap text-sm text-white dark:text-gray-200">Not found</td>
         <td className="px-6 py-4 whitespace-nowrap text-sm text-white dark:text-gray-200">Not found</td>
@@ -223,3 +233,4 @@ useEffect(() => {
 };
 
 export default Par_Hackathons;
+
