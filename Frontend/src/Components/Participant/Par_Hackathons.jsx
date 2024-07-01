@@ -156,7 +156,6 @@ useEffect(() => {
                       <>
                     <th className="px-6 py-3 text-left text-xs font-medium text-white dark:text-gray-300 uppercase tracking-wider">Grade</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-white dark:text-gray-300 uppercase tracking-wider">Plagiarism</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-white dark:text-gray-300 uppercase tracking-wider">Comments</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-white dark:text-gray-300 uppercase tracking-wider">AI Content</th>
                     </>
                     )}
@@ -181,7 +180,6 @@ useEffect(() => {
       <>
         <td className="px-6 py-4 whitespace-nowrap text-sm text-white dark:text-gray-200">{event.gradingData[0].average_rating}</td>
         <td className="px-6 py-4 whitespace-nowrap text-sm text-white dark:text-gray-200">{event.gradingData[0].plagiarism_score}</td>
-        <td className="px-6 py-4 whitespace-nowrap text-sm text-white dark:text-gray-200">{event.gradingData[0].judge_comments}</td>
         <td className="px-6 py-4 whitespace-nowrap text-sm text-white dark:text-gray-200">{event.gradingData[0].ai_content}</td>
       </>
     ) : (

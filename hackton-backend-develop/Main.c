@@ -1,7 +1,9 @@
-#include <stdio.h>
-
-int main() {
-    // This is a simple C program that prints "Hello, World!" to the console
-    printf("Hello, World!\n");
-    return 0;
+#include<stdio.h>
+int main(){
+int a,b,sum;
+a=4;
+b=10;
+sum = a+b;
+printf("Sum is: %d" ,sum);
+return 0;
 }

@@ -157,6 +157,9 @@ async function handleGetProjectEntry(req, res) {
 
 
 async function checkForPlagiarism(code) {
+  if (!code) {
+    return { plagiarismScore: '0.00', aiContent: '0.00' };
+  }
   const encodedParams = new URLSearchParams();
   encodedParams.set('content', code);
 
