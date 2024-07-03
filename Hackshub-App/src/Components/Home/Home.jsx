@@ -136,10 +136,10 @@ const Home = () => {
                       Time Allowed: {event.allowed_time} {parseInt(event.allowed_time) === 1 ? 'hour' : 'hours'}
                     </Text>
                   </View>
-                  <View className='flex-row'>
+                  {/* <View className='flex-row'>
                     <MaterialIcons name="question-answer" size={20} color="black" />
                     <ReadMoreText text={`Question: ${event.question}`} numberOfLines={1}/>
-                  </View>
+                  </View> */}
                   <View className='flex-row'>
                     <MaterialIcons name="rule" size={20} color="black" />
                     <ReadMoreText text={`Guidelines: ${event.guidelines}`} numberOfLines={1}/>

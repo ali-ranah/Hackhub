@@ -5,11 +5,13 @@ import { selectToken } from '../../../State/Reducers/tokenSlice';
 import { AxiosRequest } from '../Axios/AxiosRequest';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Table, Row } from 'react-native-table-component';
+import { Button } from 'react-native-paper';
 
 const Hackathons = () => {
   const [events, setEvents] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
+  const [FetchJoinedEvents, setFetchJoinedEvents] = useState(true);
+  const [joinedEvents, setJoinedEvents] = useState(new Set()); // To store IDs of events already joined
   const storedToken = AsyncStorage.getItem('token');
   const token = useSelector(selectToken) || storedToken;
 
@@ -24,6 +26,7 @@ const Hackathons = () => {
         const { body } = await response.data;
         setEvents(body);
         setLoading(false);
+        await fetchJoinedEvents(); // Fetch events user has already joined
       } catch (error) {
         console.error('Error fetching events:', error);
         setLoading(false);
@@ -31,7 +34,23 @@ const Hackathons = () => {
     };
 
     fetchEvents();
-  }, [currentPage, token]);
+  }, [token]);
+
+  const fetchJoinedEvents = async () => {
+    try {
+      const response = await AxiosRequest.get('/api/events/participants/user', {
+        headers: {
+          authorization: token,
+        },
+      });
+      const joinedEventsData = await response.data.body.map(event => event.event_id);
+      setJoinedEvents(new Set(joinedEventsData));
+      setFetchJoinedEvents(false); 
+    } catch (error) {
+      console.error('Error fetching joined events:', error);
+      setFetchJoinedEvents(false);
+    }
+  };
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -41,9 +60,36 @@ const Hackathons = () => {
     return `${day < 10 ? '0' + day : day}-${month < 10 ? '0' + month : month}-${year}`;
   };
 
+  const handleJoinEvent = async (eventId, question, guidelines, description) => {
+    try {
+      await AxiosRequest.post(`/api/events/${eventId}/participants`, {
+        question: question,
+        guidelines: guidelines,
+        description: description
+      }, {
+        headers: {
+          authorization: token
+        }
+      });
+      // After successfully joining, fetch updated events including the newly joined event
+      await fetchJoinedEvents(); // Refresh joined events list
+    } catch (error) {
+      console.error('Error joining event:', error);
+    }
+  };
+
+
   if (loading) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white' }}>
+      <View className="min-h-screen min-w-screen flex items-center justify-center bg-[#14082c] py-12 px-4 sm:px-6 lg:px-8">
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
+  }
+
+  if (FetchJoinedEvents) {
+    return (
+      <View className="min-h-screen min-w-screen flex items-center justify-center bg-[#14082c] py-12 px-4 sm:px-6 lg:px-8">
         <ActivityIndicator size="large" color="#0000ff" />
       </View>
     );
@@ -56,9 +102,14 @@ const Hackathons = () => {
           <Text className="text-2xl font-bold  mb-4 text-white dark:text-white">Event Summary</Text>
         </View>
         <Table borderStyle={styles.tableBorder} className={'w-[90vw]'}>
-          <Row textStyle={styles.tableText}   data={['ID', 'Title', 'Start Date', 'End Date', 'Status']}  />
+          <Row textStyle={styles.tableText}   data={['ID', 'Title', 'Start Date', 'End Date', 'Status', 'Action']}  />
           {events.map((item, index) => (
-            <Row textStyle={styles.tableText}    key={item.id} data={[++index, item.event_title, formatDate(item.start_date), formatDate(item.end_date), new Date() < new Date(item.start_date) ? 'Not Started Yet' : new Date() <= new Date(item.end_date) ? 'Ongoing' : 'Completed']} />
+            <Row textStyle={styles.tableText}    key={item.id} data={[++index, item.event_title, formatDate(item.start_date), formatDate(item.end_date), new Date() < new Date(item.start_date) ? 'Not Started Yet' : new Date() <= new Date(item.end_date) ? 'Ongoing' : 'Completed',
+              joinedEvents.has(item.id) ? 'Already Joined' : (
+                <TouchableOpacity style={styles.button} onPress={() => handleJoinEvent(item.id, item.question, item.guidelines, item.description)}>
+                <Text className='text-white font-bold'>Join Event</Text>
+              </TouchableOpacity>
+            )]} />
           ))}
         </Table>
         {Array.isArray(events) && events.length === 0 && (
@@ -79,8 +130,182 @@ const styles = StyleSheet.create({
   },
   tableText: {
     color: 'white',
-    padding:10
+    padding:6
+  },
+  button: {
+    backgroundColor: 'green',
+    padding: 2,
+    borderRadius: 5,
+    alignItems: 'center',
+    marginVertical: 8,
+    marginHorizontal:6
+  },
+  joinButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center'
   }
 });
 
 export default Hackathons;
+
+
+// import React, { useEffect, useState } from 'react';
+// import { View, Text, ActivityIndicator, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
+// import { useSelector } from 'react-redux';
+// import { selectToken } from '../../../State/Reducers/tokenSlice';
+// import { AxiosRequest } from '../Axios/AxiosRequest';
+// import AsyncStorage from '@react-native-async-storage/async-storage';
+// import { Table, Row } from 'react-native-table-component';
+
+// const Hackathons = () => {
+  // const [events, setEvents] = useState([]);
+  // const [loading, setLoading] = useState(true);
+  // const [joinedEvents, setJoinedEvents] = useState(new Set()); // To store IDs of events already joined
+  // const storedToken = AsyncStorage.getItem('token');
+  // const token = useSelector(selectToken) || storedToken;
+
+  // useEffect(() => {
+  //   const fetchEvents = async () => {
+  //     try {
+  //       const response = await AxiosRequest.get('/api/events/', {
+  //         headers: {
+  //           authorization: token,
+  //         },
+  //       });
+  //       const { body } = await response.data;
+  //       setEvents(body);
+  //       setLoading(false);
+  //       await fetchJoinedEvents(); // Fetch events user has already joined
+  //     } catch (error) {
+  //       console.error('Error fetching events:', error);
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchEvents();
+  // }, [token]);
+
+  // const fetchJoinedEvents = async () => {
+  //   try {
+  //     const response = await AxiosRequest.get('/api/events/participants/user', {
+  //       headers: {
+  //         authorization: token,
+  //       },
+  //     });
+  //     const joinedEventsData = await response.data.body.map(event => event.event_id);
+  //     setJoinedEvents(new Set(joinedEventsData));
+  //   } catch (error) {
+  //     console.error('Error fetching joined events:', error);
+  //   }
+  // };
+
+  // const formatDate = (dateString) => {
+  //   const date = new Date(dateString);
+  //   const day = date.getDate();
+  //   const month = date.getMonth() + 1;
+  //   const year = date.getFullYear();
+  //   return `${day < 10 ? '0' + day : day}-${month < 10 ? '0' + month : month}-${year}`;
+  // };
+
+  // const handleJoinEvent = async (eventId, question, guidelines, description) => {
+  //   try {
+  //     await AxiosRequest.post(`/api/events/${eventId}/participants`, {
+  //       question: question,
+  //       guidelines: guidelines,
+  //       description: description
+  //     }, {
+  //       headers: {
+  //         authorization: token
+  //       }
+  //     });
+  //     // After successfully joining, fetch updated events including the newly joined event
+  //     await fetchEvents();
+  //     await fetchJoinedEvents(); // Refresh joined events list
+  //   } catch (error) {
+  //     console.error('Error joining event:', error);
+  //   }
+  // };
+
+//   if (loading) {
+//     return (
+//       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white' }}>
+//         <ActivityIndicator size="large" color="#0000ff" />
+//       </View>
+//     );
+//   }
+
+//   return (
+//     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#14082c', padding: 12 }}>
+//       <ScrollView>
+//         <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 16, color: 'white' }}>Event Summary</Text>
+//         <Table borderStyle={styles.tableBorder}>
+//           <Row data={['ID', 'Title', 'Start Date', 'End Date', 'Status', 'Action']} style={styles.tableHeader} textStyle={styles.tableHeaderText} />
+//           {events.map((item, index) => (
+//             <Row
+//               key={item.id}
+//               data={[
+//                 ++index,
+//                 item.event_title,
+//                 formatDate(item.start_date),
+//                 formatDate(item.end_date),
+//                 new Date() < new Date(item.start_date) ? 'Not Started Yet' : new Date() <= new Date(item.end_date) ? 'Ongoing' : 'Completed',
+//                 joinedEvents.has(item.id) ? 'Already Joined' : (
+//                   <TouchableOpacity
+//                     style={styles.joinButton}
+//                     onPress={() => handleJoinEvent(item.id, 'default question', 'default guidelines', 'default description')}
+//                   >
+//                     <Text style={styles.joinButtonText}>Join Event</Text>
+//                   </TouchableOpacity>
+//                 )
+//               ]}
+//               style={styles.tableRow}
+//               textStyle={styles.tableText}
+//             />
+//           ))}
+//         </Table>
+//         {Array.isArray(events) && events.length === 0 && (
+//           <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+//             <Text style={{ fontSize: 16, fontWeight: 'bold', color: 'white', marginTop: 4 }}>No Events Found</Text>
+//           </View>
+//         )}
+//       </ScrollView>
+//     </View>
+//   );
+// };
+
+// const styles = StyleSheet.create({
+//   tableBorder: {
+//     borderWidth: 1,
+//     borderColor: 'white'
+//   },
+//   tableHeader: {
+//     height: 40,
+//     backgroundColor: '#f1f8ff'
+//   },
+//   tableHeaderText: {
+//     textAlign: 'center',
+//     fontWeight: 'bold',
+//     color: 'black'
+//   },
+//   tableRow: {
+//     height: 40
+//   },
+//   tableText: {
+//     textAlign: 'center',
+//     color: 'black'
+//   },
+  // joinButton: {
+  //   backgroundColor: 'green',
+  //   paddingVertical: 8,
+  //   paddingHorizontal: 12,
+  //   borderRadius: 5
+  // },
+  // joinButtonText: {
+  //   color: 'white',
+  //   fontWeight: 'bold',
+  //   textAlign: 'center'
+  // }
+// });
+
+// export default Hackathons;
