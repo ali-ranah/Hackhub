@@ -4,6 +4,9 @@ import { useSelector } from 'react-redux'; // Import useSelector and useDispatch
 import { selectToken } from '../../State/Reducers/tokenSlice';
 import { toast, ToastContainer } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { FaTrash } from 'react-icons/fa'; // Importing trash icon
+import { Button } from '@material-tailwind/react';
+
 
 const Hackathons = () => {
   const [events, setEvents] = useState([]);
@@ -58,11 +61,28 @@ const Hackathons = () => {
     navigate(`/organizer/submissions/${eventId}`)
   };
 
+  const handleDelete = async (eventId) => {
+    if (window.confirm("Are you sure you want to delete this event?")) {
+      try {
+        await AxiosRequest.delete(`/api/events/${eventId}`, {
+          headers: {
+            authorization: token
+          }
+        });
+        toast.success('Event deleted successfully');
+        setEvents(events.filter(event => event.id !== eventId));
+      } catch (error) {
+        toast.error(`Error deleting event: ${error.response?.data?.message || error.message}`);
+      }
+    }
+  };
+
 
 
   return (
     <>
       <div className="min-h-screen min-w-screen flex items-start justify-center bg-[#14082c] py-12 px-4 sm:px-6 lg:px-8">
+        <ToastContainer />
         <div className="w-screen space-y-8 p-8 dark:bg-gray-800">
           <div className="flex items-center justify-center">
             <h1 className="text-2xl font-bold mb-4 text-white dark:text-white">Event Summary</h1>
@@ -101,6 +121,9 @@ const Hackathons = () => {
                       <th className="px-6 py-3 text-left text-xs font-medium text-white dark:text-gray-300 uppercase tracking-wider">End Date</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-white dark:text-gray-300 uppercase tracking-wider">Status</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-white dark:text-gray-300 uppercase tracking-wider">Action</th>
+                      {events.length !=0 &&(
+                        <th className="px-6 py-3 text-left text-xs font-medium text-white dark:text-gray-300 uppercase tracking-wider">Delete</th>
+                      )}
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-black dark:bg-gray-800 dark:divide-gray-700">
@@ -114,10 +137,17 @@ const Hackathons = () => {
                           {new Date() < new Date(event.start_date)? 'Not Started Yet': new Date() <= new Date(event.end_date)? 'Ongoing': 'Completed'}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-white dark:text-gray-200">
-                          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => handleSubmission(event.id)}>
+                          <Button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => handleSubmission(event.id)}>
                             Show Submissions
-                          </button>
+                          </Button>
                         </td>
+                        {events.length!=0 &&(
+                        <td className="px-6 py-4 whitespace-nowrap  text-sm text-white dark:text-gray-200">
+                          <Button  className="text-white bg-red-700 hover:text-black " onClick={() => handleDelete(event.id)}>
+                            <FaTrash size={14}/>
+                          </Button>
+                        </td>
+                        )}
                       </tr>
                     ))}
                   </tbody>

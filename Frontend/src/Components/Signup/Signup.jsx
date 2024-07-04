@@ -30,26 +30,46 @@ const Signup = ({ toggleForm }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
   
-    // Email validation
+       // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       toast.error('Invalid email address');
       return;
     }
 
+    // Fullname validation (only alphabets and spaces)
     const fullnameRegex = /^[a-zA-Z ]*$/;
-  if (!fullnameRegex.test(fullname)) {
-    toast.error('Fullname should not contain numbers');
-    return;
-  }
+    if (!fullnameRegex.test(fullname)) {
+      toast.error('Fullname should only contain alphabets and spaces');
+      return;
+    }
+
+    // Mobile validation (only numbers)
+    const mobileRegex = /^[0-9]+$/;
+    if (!mobileRegex.test(mobile)) {
+      toast.error('Mobile should only contain numbers');
+      return;
+    }
+    
+    if (!fullnameRegex.test(country)) {
+      toast.error('Country should only contain alphabets');
+      return;
+    }
+
+    if (!fullnameRegex.test(region)) {
+      toast.error('Region should only contain alphabets');
+      return;
+    }
 
     // Password validation
     const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
     if (!passwordRegex.test(password)) {
-      toast.error('Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one digit');
+      toast.error(
+        'Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one digit'
+      );
       return;
     }
-  
+
     // Confirm password match
     if (confirmPassword !== password) {
       toast.error('Passwords do not match');

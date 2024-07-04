@@ -7,6 +7,8 @@ import { selectName } from "../../State/Reducers/nameSlice";
 import { useParams } from "react-router-dom";
 import { setEventIdAction } from "../../State/Reducers/eventIdSlice";
 import { AxiosRequest } from "../Axios/AxiosRequest";
+import { AiOutlineClockCircle } from "react-icons/ai";
+
 
 const Compiler = () => {
   const [code, setCode] = useState("");
@@ -15,6 +17,8 @@ const Compiler = () => {
   const [output, setOutput] = useState("");
   const [error, setError] = useState("");
   const { eventId } = useParams();
+  const [allowedTime, setAllowedTime] = useState(0); // Allowed time in seconds
+  const [remainingTime, setRemainingTime] = useState(null); // Remaining time in seconds
   const [title, setTitle] = useState("");
   const [question, setQuestion] = useState("");
   const storedToken = localStorage.getItem("token");
@@ -24,6 +28,7 @@ const Compiler = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    console.log('Token',token);
     const fetchQuestion = async () => {
       try {
         const response = await AxiosRequest.get(
@@ -36,7 +41,10 @@ const Compiler = () => {
         );
         const events = response.data.body;
         if (events.length > 0) {
-          setQuestion(events[0].question);
+          const event = events[0];
+          setQuestion(event.question);
+          setAllowedTime(parseTime(event.allowed_time));
+          setRemainingTime(parseTime(event.allowed_time));
         }
       } catch (error) {
         console.error("Failed to fetch question:", error);
@@ -45,12 +53,13 @@ const Compiler = () => {
 
     fetchQuestion();
   }, [eventId, token]);
+  
   useEffect(() => {
     let confirmationMessage = "Your project will be submitted. Are you sure you want to leave?";
   
-    const handleBeforeUnload = (event) => {
+    const handleBeforeUnload = async () => {
       event.preventDefault();
-      event.returnValue = confirmationMessage;
+      return;
     };
   
     const handleVisibilityChange = () => {
@@ -69,6 +78,9 @@ const Compiler = () => {
         if (result) {
           submitProject();
         }
+        else {
+          document.title = "Hackhub"
+        }
       }
     };
   
@@ -80,6 +92,31 @@ const Compiler = () => {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
   }, []);
+
+
+  useEffect(() => {
+    if (remainingTime > 0) {
+      const intervalId = setInterval(() => {
+        setRemainingTime((prevTime) => prevTime - 1);
+      }, 1000);
+      return () => clearInterval(intervalId);
+    } else if(remainingTime == 0) {
+      submitProject();
+    }
+  }, [remainingTime]);
+
+  const parseTime = (timeString) => {
+    const [hours, minutes] = timeString.split(":").map(Number);
+    return hours * 3600 + minutes * 60;
+  };
+
+const formatTime = (time) => {
+  const hours = Math.floor(time / 3600);
+  const minutes = Math.floor((time % 3600) / 60);
+  const seconds = time % 60;
+  return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+};
+
   
 
   const compileCode = async () => {
@@ -112,6 +149,7 @@ const Compiler = () => {
       document.title = "Hackhub"
       return; // Exit function if already submitted more than once
     }
+
       const response = await AxiosRequest.post(
         `/api/events/${eventId}/projects`,
         {
@@ -169,6 +207,10 @@ const Compiler = () => {
     <div className="min-w-screen min-h-screen flex flex-col justify-center text-center items-center p-6 bg-[#14082c]">
       <ToastContainer />
       <div className="flex flex-col ">
+      <div className="flex self-center items-center text-center gap-x-2 text-white text-lg mt-4">
+            <AiOutlineClockCircle  size={22} />
+            <span>{formatTime(remainingTime)}</span>
+          </div>
         <p className="text-lg font-bold text-white mt-4">Question </p>
         <span className="text-lg text-start font-bold text-white mt-2 mb-2">
           {question}
@@ -260,8 +302,8 @@ export default Compiler;
 //   const { eventId } = useParams();
 //   const [title, setTitle] = useState("");
 //   const [question, setQuestion] = useState("");
-//   const [allowedTime, setAllowedTime] = useState("");
-//   const [remainingTime, setRemainingTime] = useState(0); // Initialize remaining time in seconds
+  // const [allowedTime, setAllowedTime] = useState("");
+  // const [remainingTime, setRemainingTime] = useState(0); // Initialize remaining time in seconds
 //   const storedToken = localStorage.getItem("token");
 //   const token = useSelector(selectToken) || storedToken;
 //   const storedName = localStorage.getItem("name");
@@ -337,15 +379,15 @@ export default Compiler;
 //     return () => clearInterval(timer);
 //   }, [remainingTime]);
 
-//   const formatTime = (seconds) => {
-//     const hours = Math.floor(seconds / 3600);
-//     const minutes = Math.floor((seconds % 3600) / 60);
-//     const remainingSeconds = seconds % 60;
+  // const formatTime = (seconds) => {
+  //   const hours = Math.floor(seconds / 3600);
+  //   const minutes = Math.floor((seconds % 3600) / 60);
+  //   const remainingSeconds = seconds % 60;
 
-//     return `${hours.toString().padStart(2, "0")}:${minutes
-//       .toString()
-//       .padStart(2, "0")}:${remainingSeconds.toString().padStart(2, "0")}`;
-//   };
+  //   return `${hours.toString().padStart(2, "0")}:${minutes
+  //     .toString()
+  //     .padStart(2, "0")}:${remainingSeconds.toString().padStart(2, "0")}`;
+  // };
 
 //   const compileCode = async () => {
 //     try {
