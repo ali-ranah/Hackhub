@@ -98,6 +98,8 @@ const Hackathons = () => {
   return (
     <View className="min-h-screen min-w-screen flex items-center justify-center bg-[#14082c] py-12 px-4 sm:px-6 lg:px-8">
       <ScrollView>
+      {Array.isArray(events) && events.length > 0 ? (
+       <>
         <View className="flex items-center justify-center">
           <Text className="text-2xl font-bold  mb-4 text-white dark:text-white">Event Summary</Text>
         </View>
@@ -112,9 +114,10 @@ const Hackathons = () => {
             )]} />
           ))}
         </Table>
-        {Array.isArray(events) && events.length === 0 && (
+        </>
+      ):(
           <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-            <Text style={{ fontSize: 16, fontWeight: 'bold', color: 'white', marginTop: 4 }}>No Events Found</Text>
+            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white', marginTop: 4 }}>No Events Found</Text>
           </View>
         )}
       </ScrollView>

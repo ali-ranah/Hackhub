@@ -100,6 +100,7 @@ const Home = () => {
   return (
     <View className='min-h-screen w-full bg-[#14082c]'>
       <View className="space-y-8 p-8 dark:bg-gray-800">
+        {events.length>0?(
         <View className="flex flex-col mb-[3vh] items-center justify-center">
           {events.map((event) => (
             <View key={event.id} className="w-full flex mb-[2vh] items-center justify-center">
@@ -171,6 +172,11 @@ const Home = () => {
             </View>
           ))}
         </View>
+        ):(
+        <View>
+          <Text style={{fontSize: 20, fontWeight: 'bold', color: 'white', textAlign: 'center', marginTop: 100 }}>No Events Found</Text>
+        </View>
+        )}
       </View>
     </View>
   );

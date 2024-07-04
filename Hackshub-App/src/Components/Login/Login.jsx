@@ -8,7 +8,6 @@ import { setTokenAction } from '../../../State/Reducers/tokenSlice';
 import { AxiosRequest } from '../Axios/AxiosRequest';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import { CheckBox } from 'react-native-elements';
 
 const Login = () => {
   const navigation = useNavigation();
@@ -95,13 +94,6 @@ const Login = () => {
               </TouchableOpacity>
             </View>
           </View>
-          <CheckBox
-            checked={rememberMe}
-            onPress={() => setRememberMe(!rememberMe)}
-            title='Remember Me'
-            checkedColor='#14082c'
-            containerStyle={{ backgroundColor: 'transparent', borderWidth: 0 }}
-          />
         </View>
 
         <View className="text-center flex items-center justify-center mt-10 space-y-2">

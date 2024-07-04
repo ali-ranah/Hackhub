@@ -56,6 +56,23 @@ const onChange = (event, selectedDate) => {
     return;
   }
 
+  // Mobile validation (only numbers)
+  const mobileRegex = /^[0-9]+$/;
+  if (!mobileRegex.test(mobile)) {
+    ToastAndroid.show('Mobile should only contain numbers', ToastAndroid.SHORT);
+    return;
+  }
+  
+  if (!fullnameRegex.test(country)) {
+    ToastAndroid.show('Country should only contain alphabets', ToastAndroid.SHORT);
+    return;
+  }
+
+  if (!fullnameRegex.test(region)) {
+    ToastAndroid.show('Region should only contain alphabets', ToastAndroid.SHORT);
+    return;
+  }
+
     // Password validation
     const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
     if (!passwordRegex.test(password)) {
