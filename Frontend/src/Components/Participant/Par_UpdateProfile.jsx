@@ -80,6 +80,22 @@ const Par_Update = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const fullnameRegex = /^[a-zA-Z ]*$/;
+    const mobileRegex = /^[0-9]+$/;
+    if (formData.mobile && !mobileRegex.test(formData.mobile)) {
+      toast.error('Mobile should only contain numbers');
+      return;
+    }
+    
+    if (formData.country && !fullnameRegex.test(formData.country)) {
+      toast.error('Country should only contain alphabets');
+      return;
+    }
+
+    if (formData.region && !fullnameRegex.test(formData.region)) {
+      toast.error('Region should only contain alphabets');
+      return;
+    }
     try {
       console.log('Form Data', formData);
       if(loading) {

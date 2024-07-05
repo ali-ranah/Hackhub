@@ -118,6 +118,22 @@ console.log("New File",newFile);
 
 const handleSubmit = async (e) => {
   e.preventDefault();
+  const fullnameRegex = /^[a-zA-Z ]*$/;
+  const mobileRegex = /^[0-9]+$/;
+  if (formData.mobile && !mobileRegex.test(formData.mobile)) {
+    ToastAndroid.show('Mobile should only contain numbers', ToastAndroid.SHORT);
+    return;
+  }
+  
+  if (formData.country && !fullnameRegex.test(formData.country)) {
+    ToastAndroid.show('Country should only contain alphabets', ToastAndroid.SHORT);
+    return;
+  }
+
+  if (formData.region && !fullnameRegex.test(formData.region)) {
+    ToastAndroid.show('Region should only contain alphabets', ToastAndroid.SHORT);
+    return;
+  }
   try {
   console.log('Form Data', formData);
     console.log('Image Url',formData.image_url)
