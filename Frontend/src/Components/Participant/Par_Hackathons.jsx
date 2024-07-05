@@ -196,13 +196,15 @@ useEffect(() => {
 
 
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-white dark:text-gray-200">
-                      {!event.registered && new Date() <= new Date(event.end_date) && (
+                      {!event.registered && new Date() <= new Date(event.end_date) && new Date() >= new Date(event.start_date) ?(
   <button
     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
     onClick={() => handleJoinEvent(event.id, event.question, event.description, event.guidelines ? event.guidelines : '')}
   >
     Join
   </button>
+):(
+  <td className="px-2 py-4 whitespace-nowrap text-center text-sm text-white dark:text-gray-200">Not Started Yet</td>
 )}
 
 

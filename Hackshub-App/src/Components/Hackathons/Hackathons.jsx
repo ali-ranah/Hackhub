@@ -106,13 +106,38 @@ const Hackathons = () => {
         <Table borderStyle={styles.tableBorder} className={'w-[90vw]'}>
           <Row textStyle={styles.tableText}   data={['ID', 'Title', 'Start Date', 'End Date', 'Status', 'Action']}  />
           {events.map((item, index) => (
-            <Row textStyle={styles.tableText}    key={item.id} data={[++index, item.event_title, formatDate(item.start_date), formatDate(item.end_date), new Date() < new Date(item.start_date) ? 'Not Started Yet' : new Date() <= new Date(item.end_date) ? 'Ongoing' : 'Completed',
-              joinedEvents.has(item.id) ? 'Already Joined' : (
-                <TouchableOpacity style={styles.button} onPress={() => handleJoinEvent(item.id, item.question, item.guidelines, item.description)}>
-                <Text className='text-white font-bold'>Join Event</Text>
-              </TouchableOpacity>
-            )]} />
-          ))}
+  <Row
+    textStyle={styles.tableText}
+    key={item.id}
+    data={[
+      ++index,
+      item.event_title,
+      formatDate(item.start_date),
+      formatDate(item.end_date),
+      new Date() < new Date(item.start_date)
+        ? 'Not Started Yet'
+        : new Date() <= new Date(item.end_date)
+        ? 'Ongoing'
+        : 'Completed',
+        joinedEvents.has(item.id)
+        ? 'Already Joined'
+        : new Date() < new Date(item.start_date)
+        ? 'Not Started Yet'
+        : new Date() > new Date(item.end_date)
+        ? 'Completed'
+        : (
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() =>
+              handleJoinEvent(item.id, item.question, item.guidelines, item.description)
+            }
+          >
+            <Text className='text-white font-bold'>Join Event</Text>
+          </TouchableOpacity>
+        ),
+    ]}
+  />
+))}
         </Table>
         </>
       ):(

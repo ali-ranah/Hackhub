@@ -136,11 +136,18 @@ const Hackathons = () => {
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-white dark:text-gray-200">
                           {new Date() < new Date(event.start_date)? 'Not Started Yet': new Date() <= new Date(event.end_date)? 'Ongoing': 'Completed'}
                         </td>
+                        { (new Date() >= new Date(event.start_date) ) ? (
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-white dark:text-gray-200">
                           <Button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => handleSubmission(event.id)}>
                             Show Submissions
                           </Button>
                         </td>
+                        ):(
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-white dark:text-gray-200">
+                          Not Started Yet
+                          </td>
+                        )
+                        }
                         {events.length!=0 &&(
                         <td className="px-6 py-4 whitespace-nowrap  text-sm text-white dark:text-gray-200">
                           <Button  className="text-white bg-red-700 hover:text-black " onClick={() => handleDelete(event.id)}>
