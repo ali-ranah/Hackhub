@@ -123,21 +123,25 @@ module.exports = class UserValidator {
       }
       const returnUser = await userModel.getUserBy({ email });
   
-      if (returnUser && returnUser.password) {
-        const checkPassword = await bcrypt.compareSync(
-          password,
-          returnUser.password
-        );
+      if (!returnUser) {
+        return res.status(404).json({
+          statusCode: 404,
+          message: 'Account not found'
+        });
+      }
+  
+      if (returnUser.password) {
+        const checkPassword = bcrypt.compareSync(password, returnUser.password);
         if (checkPassword) {
           req.checked = returnUser;
           next();
+        } else {
+          return res.status(400).json({
+            statusCode: 400,
+            message: 'Wrong credentials'
+          });
         }
       }
-  
-      return res.status(400).json({
-        statusCode: 400,
-        message: 'Wrong credentials'
-      });
     } catch (err) {
       return res.status(500).json({
         statusCode: 500,
@@ -160,27 +164,32 @@ module.exports = class UserValidator {
             });
         }
         const returnUser = await userModel.getUserBy({ email });
-
-        if (returnUser && returnUser.password && returnUser.role === 'Participant') {
-            const checkPassword = await bcrypt.compareSync(
-                password,
-                returnUser.password
-            );
-            if (checkPassword) {
-                req.checked = returnUser;
-                next();
-            }
-        } else {
-            return res.status(404).json({
-                statusCode: 404,
-                message: 'User is not a participant'
-            });
+        if (!returnUser) {
+          return res.status(404).json({
+            statusCode: 404,
+            message: 'Account not found'
+          });
         }
-
-        return res.status(400).json({
-            statusCode: 400,
-            message: 'Wrong credentials'
-        });
+    
+        if (returnUser.role !== 'Participant') {
+          return res.status(403).json({
+            statusCode: 403,
+            message: 'User is not a participant'
+          });
+        }
+    
+        if (returnUser.password) {
+          const checkPassword = bcrypt.compareSync(password, returnUser.password);
+          if (checkPassword) {
+            req.checked = returnUser;
+            next();
+          } else {
+            return res.status(400).json({
+              statusCode: 400,
+              message: 'Wrong credentials'
+            });
+          }
+        }
     } catch (err) {
         return res.status(500).json({
             statusCode: 500,

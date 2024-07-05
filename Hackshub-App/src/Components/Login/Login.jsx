@@ -59,8 +59,11 @@ const Login = () => {
     } catch (error) {
       if (error.response && error.response.status === 400) {
         ToastAndroid.show('Invalid Email or Password', ToastAndroid.SHORT);
-      }else if (error.response && error.response.status === 404) {
+      }else if (error.response && error.response.status === 403) {
         ToastAndroid.show('Not A Participant, Please Enter Registered Participant Account', ToastAndroid.SHORT);
+      }
+      else if (error.response && error.response.status === 404) {
+        ToastAndroid.show('Account Not Found', ToastAndroid.SHORT);
       }
        else {
         ToastAndroid.show('Login failed', ToastAndroid.SHORT);

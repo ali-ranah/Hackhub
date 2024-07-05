@@ -53,7 +53,10 @@ const Login = ({ toggleForm }) => {
       console.error('Error during login:', error.message);
       if (error.response && error.response.status === 400) {
         toast.error('Invalid Email or Password');
-      } else {
+      }else if (error.response && error.response.status === 404) {
+        toast.error('Account not found');
+      }
+       else {
         toast.error('Login failed');
       }
     }
