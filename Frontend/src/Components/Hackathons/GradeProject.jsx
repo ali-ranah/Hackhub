@@ -10,10 +10,9 @@ import {selectSelectedRole} from "../../State/Reducers/roleSlice"
 
 const GradeProject = () => {
   const location = useLocation();
-  const {submissionId} = useParams();
-  const { projectId, event_id, plagiarismScore, aiContent } = location.state || {};
+  const { submissionId,projectId, event_id} = location.state || {};
   console.log('Location State',location.state);
-  console.log('VALUES IN STATE',projectId,event_id,plagiarismScore,aiContent);
+  console.log('VALUES IN STATE',projectId,event_id);
   const storedToken = localStorage.getItem('token');
   const token = useSelector(selectToken) || storedToken;
   const storedRole = localStorage.getItem('selectedRole');
@@ -28,13 +27,11 @@ const GradeProject = () => {
     e.preventDefault(); // Prevent default form submission
     try {
       const id = submissionId;
-      const response = await AxiosRequest.post(`/api/events/projects/${id}/grading`, {
-        project_id: projectId,
+      const response = await AxiosRequest.put(`/api/events/projects/${id}/grading`, {
         project_event_id: event_id,
+        project_id:projectId,
         judge_comments: comments,
-        aicontent: aiContent,
-        plagiarism: plagiarismScore,
-        grade: averageRating,
+        average_rating: averageRating,
       }, {
         headers: {
           authorization: token

@@ -3,6 +3,7 @@ const moment = require('moment');
 const db = require('../../models/eventsModel');
 const requestHandler = require('../../utils/requestHandler');
 const jwt=require('jsonwebtoken');
+const Notification = require('../../models/notificationModel')
 
 function handleEventsGetByUSerId(req, res) {
   const { userId } = req.decodedToken;
@@ -42,6 +43,19 @@ function handleEventGetById(req, res) {
 
 function handleEventsDelete(req, res) {
   const { id } = req.params;
+  const { userId } = req.decodedToken;
+  const newNotification = {
+    user_id: userId,
+    message: `Event Deleted Successfully`,
+  };
+
+   Notification.add(newNotification)
+    .then((createdNotification) => {
+      console.log('Notification created:', createdNotification);
+    })
+    .catch((error) => {
+      console.error('Error creating notification:', error);
+    });
   db.remove(id)
     .then(() => {
       return requestHandler.success(
@@ -87,10 +101,10 @@ function handleEventsEdit(req, res) {
     });
 }
 
-function handleEventsPost(req, res, next) {
+function handleEventsPost (req, res, next) {
 
-  const startDate = moment(req.body.start_date).format('YYYY-MM-DD');
-  const endDate = moment(req.body.end_date).format('YYYY-MM-DD');
+  const startDate = moment(req.body.start_date).format('YYYY-MM-DD HH:mm');
+  const endDate = moment(req.body.end_date).format('YYYY-MM-DD HH:mm');
 
   const token = req.headers.authorization;
     
@@ -114,6 +128,19 @@ function handleEventsPost(req, res, next) {
     levelOfParticipant:req.body.levelOfParticipant
   };
 
+  const newNotification = {
+    user_id: userId,
+    message: `New event created: ${event.event_title}`,
+  };
+
+   Notification.add(newNotification)
+    .then((createdNotification) => {
+      console.log('Notification created:', createdNotification);
+    })
+    .catch((error) => {
+      console.error('Error creating notification:', error);
+    });
+
   db.add(event)
     .then(data => {
       return requestHandler.success(
@@ -126,6 +153,7 @@ function handleEventsPost(req, res, next) {
     .catch(error => {
       return requestHandler.error(res, 500, `Server error: ${error.message}`);
     });
+ 
 }
 
 

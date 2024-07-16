@@ -21,6 +21,7 @@ const Compiler = () => {
   const [remainingTime, setRemainingTime] = useState(null); // Remaining time in seconds
   const [title, setTitle] = useState("");
   const [question, setQuestion] = useState("");
+  const [creator, setCreator] = useState("");
   const storedToken = localStorage.getItem("token");
   const token = useSelector(selectToken) || storedToken;
   const storedName = localStorage.getItem("name");
@@ -45,6 +46,7 @@ const Compiler = () => {
           setQuestion(event.question);
           setAllowedTime(parseTime(event.allowed_time));
           setRemainingTime(parseTime(event.allowed_time));
+          setCreator(event.creator_id);
         }
       } catch (error) {
         console.error("Failed to fetch question:", error);
@@ -149,13 +151,14 @@ const formatTime = (time) => {
       document.title = "Hackhub"
       return; // Exit function if already submitted more than once
     }
-
+console.log('Creator',creator);
       const response = await AxiosRequest.post(
         `/api/events/${eventId}/projects`,
         {
           project_title: title,
           participant_or_team_name: name,
           project_writeups: code,
+          creator:creator
         },
         {
           headers: {
@@ -192,6 +195,12 @@ const formatTime = (time) => {
         else if (error.response.data.message.includes("ER_DUP_ENTRY")) {
           toast.error(error.response.data.message);
         } 
+        else if (
+          error.response.data.message === "Error checking for plagiarism"
+        ) {
+          toast.error("Error checking for plagiarism");
+        } 
+        
         else {
           console.error(error.response.data.error || "An error occurred");
           toast.error("Project Submission Failed");

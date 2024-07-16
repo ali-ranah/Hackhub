@@ -8,6 +8,8 @@ const { googleAuthStrategy } = require('../api/auth/googleStrategy');
 const { githubAuthStrategy } = require('../api/auth/githubStrategy');
 const { chatBot } = require('../controllers/chatBotController/botController.js');
 const { Compiler } = require('../controllers/compilerController/compilerController.js');
+const notificationsRoutes = require('../routes/notifications.js')
+const searchRoutes = require('../routes/search.js');
 
 
 const router = Router();
@@ -29,5 +31,8 @@ router.use('/event-category', categoriesRoutes);
 router.use('/users', usersRoutes);
 router.use('/ask', chatBot);
 router.use('/compile',Compiler );
+router.use('/notifications',notificationsRoutes );
+router.use('/search',searchRoutes );
+
 
 module.exports = router;

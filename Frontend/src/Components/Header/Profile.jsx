@@ -15,7 +15,7 @@ import { selectEmail } from '../../State/Reducers/emailSlice';
 import { setToken } from "../../State/Reducers/tokenSlice";
 import { setEmail } from "../../State/Reducers/emailSlice";
 import { setName } from "../../State/Reducers/nameSlice";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {toast,ToastContainer} from "react-toastify"
 import { AxiosRequest } from "../Axios/AxiosRequest";
 
@@ -88,7 +88,9 @@ const [loading, setLoading] = useState(true); // Add loading state
     <>
       <ToastContainer />
       <div className="flex gap-2 items-center">
-        <IoMdNotificationsOutline className="w-8 h-8" />
+      <Link to={`/${role.toLowerCase()}/notification`}>
+      <IoMdNotificationsOutline className="w-8 h-8" />
+        </Link>
         {loading ? (
           <div className="w-8 h-8 bg-gray-200 rounded-full animate-pulse"></div>
         ) : (

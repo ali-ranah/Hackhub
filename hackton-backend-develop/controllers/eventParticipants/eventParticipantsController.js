@@ -1,5 +1,7 @@
 const db = require('../../models/eventParticipantsModel');
 const requestHandler = require('../../utils/requestHandler');
+const Notification = require('../../models/notificationModel')
+
 
 async function handleEventsGetById(req, res) {
   const { id } = req.params;
@@ -36,7 +38,18 @@ async function handleEventRegistration(req, res) {
     return requestHandler.error(res, 400, 'Event is full');
   }
   
+  const newNotification = {
+    user_id: userId,
+    message: `Event ${event.event_title} joined successfully`,
+  };
 
+   Notification.add(newNotification)
+    .then((createdNotification) => {
+      console.log('Notification created:', createdNotification);
+    })
+    .catch((error) => {
+      console.error('Error creating notification:', error);
+    });
   // Add participant if there is still space
   await db
     .addCredentials({

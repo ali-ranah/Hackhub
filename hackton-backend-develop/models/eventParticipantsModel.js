@@ -65,6 +65,7 @@ const getByUserIdAndEventId = async (id,eventId) => {
       'e.event_title',
       'e.start_date',
       'e.end_date',
+      'e.creator_id',
       'e.location',
       'e.allowed_time',
       'u.fullname as organizer_name',

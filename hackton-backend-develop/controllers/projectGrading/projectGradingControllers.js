@@ -2,6 +2,8 @@
 const db = require('../../models/projectGradingModel');
 const eventsDb = require('../../models/eventsModel');
 const requestHandler = require('../../utils/requestHandler');
+const Notification = require('../../models/notificationModel')
+
 
 // Project grading
 
@@ -24,37 +26,34 @@ async function handleProjectGradingDelete(req, res) {
 
 async function handleProjectGradingEdit(req, res) {
   try {
-    const { userId } = req.decodedToken;
+    const { userId, name } = req.decodedToken;
     const { id } = req.params;
-
-    // Calculate average rating
-    const totalRating = [
-      req.body.product_design,
-      req.body.functionality,
-      req.body.innovation,
-      req.body.product_fit,
-      req.body.extensibility,
-      req.body.presentation
-    ];
-    const avgRating = totalRating.reduce((a, b) => a + b) / totalRating.length;
 
     // Prepare edited project grading object
     const editedProjectGrading = {
-      product_design: req.body.product_design,
-      functionality: req.body.functionality,
-      project_id: id,
-      innovation: req.body.innovation,
-      product_fit: req.body.product_fit,
-      extensibility: req.body.extensibility,
-      presentation: req.body.presentation,
+      project_id: req.body.project_id,
       judge_id: userId,
-      project_event_id: req.body.project_event_id,
+      project_event_id: req.body.project_event_id, // Assuming project_event_id is provided in the request body
       judge_comments: req.body.judge_comments,
-      average_rating: avgRating.toFixed(1)
+      average_rating: req.body.average_rating, // Ensure average_rating is formatted to two decimal places
+    };
+    let newNotification = {
+      user_id: id,
+      message: `Your Grades had been updated by ${name}`,
     };
 
+    // Add notification for project submission to the creator
+    await Notification.add(newNotification);
+
+    newNotification = {
+      user_id: userId,
+      message: `Grades for Project with ID ${req.body.project_id} have been updated`,
+    };
+
+    // Add notification for project submission to the creator
+    await Notification.add(newNotification);
     // Update grading in the database
-    const data = await db.updateGrading(id, editedProjectGrading);
+    const data = await db.updateGrading(req.body.project_id, editedProjectGrading);
 
     // Return success response
     return requestHandler.success(res, 200, 'Grade edited successfully', data);
@@ -66,43 +65,21 @@ async function handleProjectGradingEdit(req, res) {
 
 
 
-// async function handleprojectGradingPost(req, res) {
-//   try {
-//     const { userId } = req.decodedToken;
-//     const { id } = req.params;
 
-//     // Prepare project grading object using data sent from frontend
-//     const projectGrading = {
-//       project_id: id,
-//       judge_id: userId,
-//       project_event_id: req.body.project_event_id,
-//       judge_comments: req.body.judge_comments
-//       // No need for average_rating property since rubrics are not used
-//     };
-
-//     // Add grading to the database
-//     const data = await db.addGrading(projectGrading);
-
-//     // Return success response
-//     return requestHandler.success(res, 201, 'Grade submitted successfully', data);
-//   } catch (error) {
-//     // Handle errors
-//     return requestHandler.error(res, 500, `Server error: ${error.message}`);
-//   }
-// }
 
 async function handleprojectGradingPost(req, res) {
   try {
-    const { userId } = req.decodedToken;
+    const { userId,name } = req.decodedToken;
     const { id } = req.params;
 
     // Prepare project grading object using data sent from frontend
     const projectGrading = {
       project_id: req.body.project_id,
-      judge_id: userId,
+      judge_id: req.body.creator,
       project_event_id: req.body.project_event_id,
       judge_comments: req.body.judge_comments,
     };
+    console.log('Creator',req.body.creator);
 
     // Calculate the final grade after deducting AI content and plagiarism scores
     const aiContentPercentage = req.body.aicontent; // Example AI content percentage
@@ -118,6 +95,32 @@ async function handleprojectGradingPost(req, res) {
 
     // Add grading to the database
     const data = await db.addGrading(projectGrading);
+    
+    let newNotification = {
+      user_id: userId,
+      message: `${req.body.participant_name}'s Project graded successfully`,
+    };
+  
+     Notification.add(newNotification)
+      .then((createdNotification) => {
+        console.log('Notification created:', createdNotification);
+      })
+      .catch((error) => {
+        console.error('Error creating notification:', error);
+      });
+       newNotification = {
+        user_id: req.body.participant_id,
+        message: `Your Project had been graded by ${name}`,
+      };
+    
+       Notification.add(newNotification)
+        .then((createdNotification) => {
+          console.log('Notification created:', createdNotification);
+        })
+        .catch((error) => {
+          console.error('Error creating notification:', error);
+        });
+  
 
     // Return success response
     return requestHandler.success(res, 201, 'Grade submitted successfully', data);

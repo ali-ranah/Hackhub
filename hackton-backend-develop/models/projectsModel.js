@@ -10,7 +10,7 @@ async function addProject(project) {
 
 async function findProjectTitle(projectTitle) {
   const submitProject = await db('project_entries')
-    .where({ project_title: projectTitle })
+    .where('project_title', 'LIKE',projectTitle )
     .returning('*');
   return submitProject;
 }

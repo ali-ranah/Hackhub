@@ -5,11 +5,14 @@ import {  useSelector } from 'react-redux';
 import {selectSelectedRole} from "../../State/Reducers/roleSlice"
 
 import Profile from "./Profile";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
   const [openNav, setOpenNav] = React.useState(false);
   const storedRole = localStorage.getItem('selectedRole');
+  const [searchQuery, setSearchQuery] = React.useState('');
   const role = useSelector(selectSelectedRole) || storedRole; 
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     window.addEventListener(
@@ -18,6 +21,20 @@ const Header = () => {
     );
   }, []);
 
+  const handleSearch = () => {
+    if (searchQuery.trim() !== '') {
+      navigate(`/${role.toLowerCase()}/search?q=${encodeURIComponent(searchQuery)}`); // Navigate to search results with query parameter
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
+  const handleInputChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
 
 
   const navList = (
@@ -78,9 +95,12 @@ const Header = () => {
               size="lg"
               variant="outlined"
               className="focus:ring-0"
+              value={searchQuery}
+              onChange={handleInputChange}
+              onKeyPress={handleKeyPress}
             />
           </div>
-          <Button size="md" className="rounded-none bg-[#29272d] ">
+          <Button size="md" className="rounded-none bg-[#29272d]" onClick={handleSearch}>
             <svg
               width="13"
               height="14"
@@ -158,9 +178,11 @@ const Header = () => {
               size="lg"
               variant="outlined"
               className="focus:ring-0"
+              value={searchQuery}
+              onChange={handleInputChange}
             />
           </div>
-          <Button size="md" className="rounded-none bg-[#29272d] ">
+          <Button size="md" className="rounded-none bg-[#29272d] " onClick={handleSearch}>
             <svg
               width="13"
               height="14"

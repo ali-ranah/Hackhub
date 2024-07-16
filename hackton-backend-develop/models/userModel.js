@@ -1,9 +1,9 @@
 const db = require('../data/dbConfig');
 
 async function getUserId(id) {
-  const userId = await db('users')
-    .where('users.id', id)
-    .select('fullname', 'username', 'email', 'bio', 'image_url')
+  const userId = await db('users as u')
+    .select('u.fullname', 'u.username', 'u.email', 'u.image_url','u.role')
+    .where({id})
     .first();
   return userId;
 }

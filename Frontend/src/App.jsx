@@ -21,6 +21,8 @@ import SubmissionPage from './Components/Hackathons/SubmissionPage'
 import GradeProject from './Components/Hackathons/GradeProject'
 import Par_Update from './Components/Participant/Par_UpdateProfile'
 import EventDetails from './Components/Participant/EventDetails'
+import Notification from './Components/Notifications/Notifications'
+import SearchResults from './Components/Search/SearchResults'
 
 
 function App() {
@@ -51,7 +53,9 @@ function App() {
                     <Route path='organize-hackathons' element={<Organize />} />
                     <Route path='profile' element={<UserProfile />} />
                     <Route path="submissions/:id" element={<SubmissionPage/>} />
+                    <Route path='notification' element={< Notification/>} />
                     <Route path="grade/:submissionId" element={<GradeProject />} />
+                    <Route path="/search" element={<SearchResults />} />
                   </Routes>
                 </OrganizerLayout>
               ) : selectedRole === "Participant" ? (
@@ -63,6 +67,8 @@ function App() {
                     <Route path='ai-bot' element={<ChatBot />} /> 
                     <Route path="event-details/:eventId" element={<EventDetails />} />
                     <Route path='compiler/:eventId' element={< Compiler/>} />
+                    <Route path='notification' element={< Notification/>} />
+                    <Route path="/search" element={<SearchResults />} />
                   </Routes>
                 </ParticipantLayout>
               ) : null

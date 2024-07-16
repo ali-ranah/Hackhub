@@ -4,7 +4,8 @@ const requestHandler = require('../utils/requestHandler');
 const generateToken = (res, statusCode, message, user) => {
   const payload = {
     userId: user.id,
-    email: user.email
+    email: user.email,
+    name: user.fullname,
   };
   console.log('payload');
   console.log(payload);

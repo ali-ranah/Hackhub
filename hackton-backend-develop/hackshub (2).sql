@@ -246,6 +246,17 @@ CREATE TABLE `users` (
   `PYTHON_skill` int(10) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE `notifications` (
+    `id` INT(10) UNSIGNED NOT NULL,
+    `user_id` INT UNSIGNED,
+    `message` TEXT NOT NULL,
+    `read_at` TIMESTAMP NULL,
+    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+
 --
 -- Dumping data for table `users`
 --
@@ -266,6 +277,7 @@ ALTER TABLE `events`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `events_event_title_unique` (`event_title`) USING HASH;
 
+
 --
 -- Indexes for table `event_categories`
 --
@@ -284,12 +296,21 @@ ALTER TABLE `event_team`
   ADD KEY `event_team_user_id_foreign` (`user_id`),
   ADD KEY `event_team_event_id_foreign` (`event_id`);
 
+ALTER TABLE `notifications`
+  ADD PRIMARY KEY (`id`);
 
+
+ALTER TABLE `notifications`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 --
 -- Indexes for table `knex_migrations`
 --
 ALTER TABLE `knex_migrations`
   ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `notifications`
+  ADD KEY `fk_notifications_users_id_foreign` (`user_id`);
+
 
 --
 -- Indexes for table `knex_migrations_lock`
@@ -423,6 +444,9 @@ ALTER TABLE `event_participants`
  ADD CONSTRAINT `event_participants_event_id_foreign` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
  ADD CONSTRAINT `event_participants_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 --
+ALTER TABLE `notifications`
+ADD CONSTRAINT `fk_notifications_users_id_foreign`FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
 -- Constraints for table `event_team`
 --
 ALTER TABLE `event_team`

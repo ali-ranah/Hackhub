@@ -60,7 +60,7 @@ async function getByUserId(perPage , currentPage , id) {
 
 
 async function findByTitle(title) {
-  const foundTitle = await db('events').where({ event_title: title });
+  const foundTitle = await db('events').where('event_title', 'LIKE', title);
   return foundTitle;
 }
 
