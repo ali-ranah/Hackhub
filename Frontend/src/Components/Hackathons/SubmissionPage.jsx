@@ -267,6 +267,7 @@ const SubmissionPage = () => {
                   <p><strong>Participant Name:</strong> {project.participant_or_team_name}</p>
                   <p><strong>Project ID:</strong> {project.id}</p>
                   <p><strong>Project Code:</strong><pre className='text-sm text-wrap lg:text-md'>{project.project_writeups}</pre></p>
+                  <p><strong>Project Output:</strong><pre className='text-sm text-wrap lg:text-md'>{project.output}</pre></p>
                   <p><strong>Participant ID:</strong> {project.submitted_by}</p>
                   <p><strong>Created At:</strong> {new Date(project.created_at).toLocaleString()}</p>
                   {gradings.some(grading => grading.project_id === project.id) && (

@@ -56,7 +56,7 @@ const GradeProject = () => {
                   <ToastContainer />
             <div className="max-w-md w-full space-y-8 p-8 bg-white rounded-xl shadow-xl">
     <div className="flex items-center justify-center">
-      <h1 className="text-2xl font-bold mb-4 text-black dark:text-white"> Grade Project</h1>
+      <h1 className="text-2xl font-bold mb-4 text-black dark:text-white">Edit Grade</h1>
     </div>
     <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
       <Input

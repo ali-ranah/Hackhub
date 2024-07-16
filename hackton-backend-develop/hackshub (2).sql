@@ -190,6 +190,7 @@ CREATE TABLE `project_entries` (
   `participant_or_team_name` text NOT NULL,
   `event_id` int(10) UNSIGNED NOT NULL,
   `video_url` varchar(255) DEFAULT NULL,
+  `output` text NOT NULL,
   `git_url` varchar(255) DEFAULT NULL,
   `project_writeups` text DEFAULT NULL,
   `submitted_by` int(10) UNSIGNED NOT NULL,

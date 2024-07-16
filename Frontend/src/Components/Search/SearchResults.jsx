@@ -43,7 +43,7 @@ const SearchResults = () => {
   }, [searchQuery, token]);
 
   return (
-    <div className="p-6  flex flex-col text-center items-center justify-center space-y-6 bg-[#14082c]">
+    <div className="p-6 min-h-screen flex flex-col text-center items-center justify-center space-y-6 bg-[#14082c]">
       {loading && <Typography>Loading...</Typography>}
       {error && <Typography color="red">{error}</Typography>}
       {!loading && !error && (
@@ -95,6 +95,9 @@ const SearchResults = () => {
                 </ul>
               </CardBody>
             </Card>
+          )}
+          {(results.events.length === 0&& results.notifications.length === 0&& results.entry.length === 0) && (
+            <Typography color="white">Nothing found matching your search query.</Typography>
           )}
         </div>
       )}

@@ -144,6 +144,10 @@ const formatTime = (time) => {
 
   const submitProject = async () => {
     try {
+      if(!output){
+        toast.error("Please compile first to submit.");
+        return;
+      }
       submissionCount++;
 
     // Check if submission count is more than one
@@ -158,7 +162,8 @@ console.log('Creator',creator);
           project_title: title,
           participant_or_team_name: name,
           project_writeups: code,
-          creator:creator
+          creator:creator,
+          output:output
         },
         {
           headers: {

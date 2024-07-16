@@ -200,6 +200,7 @@ async function handleprojectEntriesPost(req, res) {
       event_id: id,
       project_writeups: req.body.project_writeups,
       submitted_by: userId,
+      output:req.body.output
     };
 
     // Add project submission to the database
